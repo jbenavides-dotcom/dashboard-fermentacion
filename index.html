@@ -1,0 +1,996 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fermentation Lab — La Palma y el Tucán</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Baskervville:ital@0;1&family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      /* Fondos */
+      --dark:   #2C2D2E;      /* Carbón — fondo principal */
+      --dark2:  #3a3b3c;      /* Carbón medio — tarjetas */
+      --dark3:  #484949;      /* Carbón claro — elementos */
+
+      /* Marca LP&ET */
+      --gold:   #CB9F5B;      /* Dorado La Palma — títulos, acentos */
+      --pink:   #ED728B;      /* Rosa Vibrante — CTAs, highlights */
+      --light:  #FCF7EC;      /* Crema — texto principal */
+
+      /* Pasteles (badges, tags) */
+      --rosa-empaque: #F7C7C7;
+      --rosa-blush:   #FFF1F2;
+      --miel:         #FEF9C3;
+      --verde-finca:  #DCFCE7;
+      --beige:        #FAF9F5;
+
+      /* Estados */
+      --ok:     #4ade80;      /* OK / éxito */
+      --warn:   #facc15;      /* Advertencia */
+      --crit:   #ef4444;      /* Crítico */
+
+      /* Neutros */
+      --muted:  #9e9e9e;
+      --border: rgba(203,159,91,0.25);  /* Borde dorado suave */
+      --radius: 12px;
+      --gap:    20px;
+    }
+
+    body {
+      background: var(--dark);
+      color: var(--light);
+      font-family: 'Jost', sans-serif;
+      font-size: 14px;
+      line-height: 1.55;
+      min-height: 100vh;
+    }
+
+    /* ── Scrollbar ── */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--dark2); }
+    ::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 3px; }
+
+    /* ── Layout ── */
+    .page { max-width: 1400px; margin: 0 auto; padding: 0 var(--gap) 48px; }
+
+    /* ── HEADER ── */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(44,45,46,0.95);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+      padding: 16px var(--gap);
+    }
+    .header-inner {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .header-brand h1 {
+      font-family: 'Baskervville', serif;
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--light);
+      letter-spacing: -0.3px;
+    }
+    .header-brand h1 span { color: var(--gold); }
+    .header-brand p {
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-top: 2px;
+      font-weight: 300;
+    }
+    .header-meta {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .last-update {
+      font-size: 0.72rem;
+      color: var(--muted);
+    }
+    .last-update strong { color: var(--ok); }
+    .badge-demo {
+      background: rgba(232,131,140,0.15);
+      border: 1px solid var(--pink);
+      color: var(--pink);
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      padding: 3px 10px;
+      border-radius: 20px;
+    }
+
+    /* ── Section titles ── */
+    .section-title {
+      font-family: 'Baskervville', serif;
+      font-size: 1.15rem;
+      color: var(--pink);
+      font-weight: 600;
+      margin-bottom: 16px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+    }
+    .section-title small {
+      font-family: 'Jost', sans-serif;
+      font-size: 0.72rem;
+      color: var(--muted);
+      font-weight: 400;
+      margin-left: 10px;
+    }
+
+    /* ── KPI row ── */
+    .section { margin-top: 36px; }
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: var(--gap);
+    }
+    .kpi-card {
+      background: var(--dark2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .kpi-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+    }
+    .kpi-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 4px; height: 100%;
+      background: var(--gold);
+      border-radius: var(--radius) 0 0 var(--radius);
+    }
+    .kpi-card.alert-warn::before { background: var(--warn); }
+    .kpi-card.alert-ok::before   { background: var(--ok); }
+    .kpi-label {
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+    .kpi-value {
+      font-family: 'Baskervville', serif;
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--gold);
+      line-height: 1;
+    }
+    .kpi-value span { font-size: 1rem; color: var(--muted); font-family: 'Jost', sans-serif; font-weight: 400; }
+    .kpi-sub {
+      font-size: 0.72rem;
+      color: var(--muted);
+      margin-top: 6px;
+    }
+    .progress-bar {
+      margin-top: 10px;
+      height: 4px;
+      background: rgba(255,255,255,0.08);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      background: var(--gold);
+      border-radius: 2px;
+      transition: width 0.6s ease;
+    }
+
+    /* ── Canecas grid ── */
+    .canecas-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+      gap: var(--gap);
+    }
+    .caneca-card {
+      background: var(--dark2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+      position: relative;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .caneca-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+    }
+    .caneca-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+    .caneca-id {
+      font-family: 'Baskervville', serif;
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--light);
+    }
+    .status-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .status-dot.ok   { background: var(--ok);   box-shadow: 0 0 6px var(--ok); }
+    .status-dot.warn { background: var(--warn);  box-shadow: 0 0 6px var(--warn); }
+    .status-dot.crit { background: var(--crit);  box-shadow: 0 0 6px var(--crit); }
+
+    .proceso-badge {
+      display: inline-block;
+      font-size: 0.62rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      padding: 2px 8px;
+      border-radius: 20px;
+      margin-bottom: 10px;
+    }
+    .badge-lpx { background: rgba(232,131,140,0.15); color: var(--pink); border: 1px solid rgba(232,131,140,0.4); }
+    .badge-biw { background: rgba(201,162,39,0.15);  color: var(--gold); border: 1px solid rgba(201,162,39,0.4); }
+    .badge-no  { background: rgba(74,222,128,0.12);  color: var(--ok);   border: 1px solid rgba(74,222,128,0.3); }
+    .badge-csp { background: rgba(147,197,253,0.12); color: #93c5fd;     border: 1px solid rgba(147,197,253,0.3); }
+    .badge-bnx { background: rgba(250,204,21,0.12);  color: var(--warn); border: 1px solid rgba(250,204,21,0.3); }
+
+    .caneca-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 5px;
+    }
+    .caneca-row-label { font-size: 0.68rem; color: var(--muted); }
+    .caneca-row-val   { font-size: 0.8rem;  font-weight: 500; color: var(--light); }
+    .caneca-row-val.highlight { color: var(--gold); font-weight: 600; }
+    .caneca-row-val.ok-val    { color: var(--ok); }
+    .caneca-row-val.warn-val  { color: var(--warn); }
+
+    .caneca-variedad {
+      font-size: 0.72rem;
+      color: var(--muted);
+      margin-bottom: 10px;
+      font-style: italic;
+    }
+
+    .tiempo-bar {
+      margin-top: 12px;
+    }
+    .tiempo-bar-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.65rem;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+    .tiempo-bar-track {
+      height: 5px;
+      background: rgba(255,255,255,0.08);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    .tiempo-bar-fill {
+      height: 100%;
+      border-radius: 3px;
+      transition: width 0.6s ease;
+    }
+    .fill-ok   { background: var(--ok); }
+    .fill-warn { background: var(--warn); }
+    .fill-gold { background: var(--gold); }
+    .fill-crit { background: var(--crit); }
+
+    /* ── Charts ── */
+    .charts-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: var(--gap);
+    }
+    .chart-card {
+      background: var(--dark2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+    }
+    .chart-title {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--light);
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      margin-bottom: 16px;
+    }
+    .chart-title span { color: var(--gold); }
+    .chart-wrap { position: relative; height: 200px; }
+
+    /* ── Alertas ── */
+    .alertas-list { display: flex; flex-direction: column; gap: 10px; }
+    .alerta-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      background: var(--dark2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px 16px;
+      transition: background 0.2s;
+    }
+    .alerta-item:hover { background: var(--dark3); }
+    .alerta-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .alerta-dot.ok   { background: var(--ok);   box-shadow: 0 0 5px var(--ok); }
+    .alerta-dot.warn { background: var(--warn);  box-shadow: 0 0 5px var(--warn); }
+    .alerta-dot.crit { background: var(--crit);  box-shadow: 0 0 5px var(--crit); }
+    .alerta-tiempo {
+      font-size: 0.68rem;
+      color: var(--muted);
+      min-width: 88px;
+      flex-shrink: 0;
+    }
+    .alerta-caneca {
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--gold);
+      min-width: 82px;
+      flex-shrink: 0;
+    }
+    .alerta-tipo {
+      font-size: 0.72rem;
+      font-weight: 500;
+      color: var(--light);
+    }
+    .alerta-msg {
+      font-size: 0.7rem;
+      color: var(--muted);
+      margin-left: auto;
+      text-align: right;
+    }
+
+    /* ── Tabla procesos ── */
+    .tabla-wrap {
+      overflow-x: auto;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--dark2);
+    }
+    th {
+      background: var(--dark3);
+      color: var(--muted);
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      letter-spacing: 0.7px;
+      font-weight: 600;
+      padding: 12px 16px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+      white-space: nowrap;
+    }
+    td {
+      padding: 12px 16px;
+      font-size: 0.8rem;
+      border-bottom: 1px solid rgba(201,162,39,0.08);
+      vertical-align: middle;
+    }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: rgba(255,255,255,0.02); }
+    td.nombre-proceso { font-weight: 500; color: var(--light); }
+    td.codigo-proceso { font-family: monospace; color: var(--gold); font-size: 0.75rem; }
+    td.score { color: var(--ok); font-weight: 500; }
+    td.duracion { color: var(--muted); }
+    .canecas-count {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(232,131,140,0.12);
+      border: 1px solid rgba(232,131,140,0.3);
+      color: var(--pink);
+      border-radius: 20px;
+      min-width: 28px;
+      height: 22px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 0 8px;
+    }
+
+    /* ── Footer ── */
+    footer {
+      margin-top: 56px;
+      padding: 24px var(--gap);
+      border-top: 1px solid var(--border);
+      text-align: center;
+    }
+    .footer-brand {
+      font-family: 'Baskervville', serif;
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+    .footer-brand span { color: var(--gold); }
+    .footer-note {
+      font-size: 0.68rem;
+      color: rgba(158,158,158,0.5);
+      margin-top: 6px;
+      letter-spacing: 0.3px;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 640px) {
+      .header-inner { flex-direction: column; align-items: flex-start; }
+      .kpi-value { font-size: 1.6rem; }
+      .canecas-grid { grid-template-columns: 1fr 1fr; }
+      .alerta-msg { display: none; }
+      .charts-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 420px) {
+      .canecas-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ╔══════════════════════════════════════════════╗ -->
+<!-- ║                  HEADER                     ║ -->
+<!-- ╚══════════════════════════════════════════════╝ -->
+<header>
+  <div class="header-inner">
+    <div class="header-brand">
+      <h1>La Palma y el Tucán — <span>Fermentation Lab</span></h1>
+      <p>Monitoreo IoT de fermentación de café · Sistema de Control de Procesos</p>
+    </div>
+    <div class="header-meta">
+      <span class="last-update">Última actualización: <strong>hace 2 minutos</strong> · 06 Abr 2026, 14:37</span>
+      <span class="badge-demo">Datos de prueba</span>
+    </div>
+  </div>
+</header>
+
+<div class="page">
+
+  <!-- ╔══════════════════════════════════════════════╗ -->
+  <!-- ║                   KPIs                      ║ -->
+  <!-- ╚══════════════════════════════════════════════╝ -->
+  <section class="section">
+    <h2 class="section-title">Resumen operativo</h2>
+    <div class="kpi-grid">
+
+      <div class="kpi-card">
+        <div class="kpi-label">Canecas activas</div>
+        <div class="kpi-value">12 <span>/ 50</span></div>
+        <div class="kpi-sub">24% de capacidad en uso</div>
+        <div class="progress-bar">
+          <div class="progress-fill" style="width:24%"></div>
+        </div>
+      </div>
+
+      <div class="kpi-card">
+        <div class="kpi-label">Procesos en curso</div>
+        <div class="kpi-value">5</div>
+        <div class="kpi-sub">LPX-500 · BIW-200 · NO-120 · CSP-48 · BNX-100</div>
+      </div>
+
+      <div class="kpi-card alert-warn">
+        <div class="kpi-label">Alertas activas</div>
+        <div class="kpi-value">2</div>
+        <div class="kpi-sub" style="color:var(--warn)">1 advertencia · 1 revisión OK</div>
+      </div>
+
+      <div class="kpi-card alert-ok">
+        <div class="kpi-label">Lotes completados hoy</div>
+        <div class="kpi-value">3</div>
+        <div class="kpi-sub" style="color:var(--ok)">2 LPX · 1 CSP — Listos para despulpe</div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ╔══════════════════════════════════════════════╗ -->
+  <!-- ║             CANECAS ACTIVAS                 ║ -->
+  <!-- ╚══════════════════════════════════════════════╝ -->
+  <section class="section">
+    <h2 class="section-title">Canecas activas <small>12 unidades monitoreadas en tiempo real</small></h2>
+    <div class="canecas-grid" id="canecas-grid">
+      <!-- generadas por JS -->
+    </div>
+  </section>
+
+  <!-- ╔══════════════════════════════════════════════╗ -->
+  <!-- ║          CURVAS EN TIEMPO REAL              ║ -->
+  <!-- ╚══════════════════════════════════════════════╝ -->
+  <section class="section">
+    <h2 class="section-title">Curvas de fermentación <small>Últimas 96 horas — 3 canecas representativas</small></h2>
+    <div class="charts-grid">
+
+      <div class="chart-card">
+        <div class="chart-title"><span>pH</span> — Acidificación progresiva</div>
+        <div class="chart-wrap">
+          <canvas id="chartPH"></canvas>
+        </div>
+      </div>
+
+      <div class="chart-card">
+        <div class="chart-title"><span>Temperatura</span> — Oscilación controlada (°C)</div>
+        <div class="chart-wrap">
+          <canvas id="chartTemp"></canvas>
+        </div>
+      </div>
+
+      <div class="chart-card">
+        <div class="chart-title"><span>Brix</span> — Consumo de azúcares (°Bx)</div>
+        <div class="chart-wrap">
+          <canvas id="chartBrix"></canvas>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ╔══════════════════════════════════════════════╗ -->
+  <!-- ║              ALERTAS RECIENTES              ║ -->
+  <!-- ╚══════════════════════════════════════════════╝ -->
+  <section class="section">
+    <h2 class="section-title">Alertas recientes <small>Últimas 5 notificaciones del sistema</small></h2>
+    <div class="alertas-list">
+
+      <div class="alerta-item">
+        <div class="alerta-dot warn"></div>
+        <div class="alerta-tiempo">Hoy 14:12</div>
+        <div class="alerta-caneca">LPET-C03</div>
+        <div class="alerta-tipo">Temperatura &gt; 26°C detectada</div>
+        <div class="alerta-msg">Verificar ventilación del área — LPX-500</div>
+      </div>
+
+      <div class="alerta-item">
+        <div class="alerta-dot ok"></div>
+        <div class="alerta-tiempo">Hoy 13:45</div>
+        <div class="alerta-caneca">LPET-C07</div>
+        <div class="alerta-tipo">pH objetivo alcanzado (3.82)</div>
+        <div class="alerta-msg">Listo para iniciar despulpe — CSP-48</div>
+      </div>
+
+      <div class="alerta-item">
+        <div class="alerta-dot ok"></div>
+        <div class="alerta-tiempo">Hoy 12:00</div>
+        <div class="alerta-caneca">LPET-C01</div>
+        <div class="alerta-tipo">Checkpoint 48h completado</div>
+        <div class="alerta-msg">pH 4.12 · Brix 10.4 · Olor: Lácteo limpio — LPX-500</div>
+      </div>
+
+      <div class="alerta-item">
+        <div class="alerta-dot warn"></div>
+        <div class="alerta-tiempo">Hoy 09:30</div>
+        <div class="alerta-caneca">LPET-C09</div>
+        <div class="alerta-tipo">Velocidad de pH baja (&lt; 0.03 pH/h)</div>
+        <div class="alerta-msg">Verificar inóculo y temperatura — BNX-100</div>
+      </div>
+
+      <div class="alerta-item">
+        <div class="alerta-dot ok"></div>
+        <div class="alerta-tiempo">Hoy 06:00</div>
+        <div class="alerta-caneca">Sistema</div>
+        <div class="alerta-tipo">Backup de datos completado</div>
+        <div class="alerta-msg">12 canecas · 864 lecturas exportadas</div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ╔══════════════════════════════════════════════╗ -->
+  <!-- ║           TABLA PROCESOS ACTIVOS            ║ -->
+  <!-- ╚══════════════════════════════════════════════╝ -->
+  <section class="section">
+    <h2 class="section-title">Protocolos activos <small>Resumen de los 5 procesos en ejecución</small></h2>
+    <div class="tabla-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Proceso</th>
+            <th>Código</th>
+            <th>Canecas</th>
+            <th>Score esperado (SCA)</th>
+            <th>Duración estándar</th>
+            <th>Perfil de taza</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="nombre-proceso">Láctico Modular LPX</td>
+            <td class="codigo-proceso">LPX-500</td>
+            <td><span class="canecas-count">3</span></td>
+            <td class="score">89.5 – 90.5</td>
+            <td class="duracion">96h + 24-36h baba</td>
+            <td>Cítrico · Floral · Dulce</td>
+          </tr>
+          <tr>
+            <td class="nombre-proceso">Bio-Innovation Washed</td>
+            <td class="codigo-proceso">BIW-200</td>
+            <td><span class="canecas-count">2</span></td>
+            <td class="score">89.5 – 91.0</td>
+            <td class="duracion">90-110h + 12-24h oxidativa</td>
+            <td>Frutal complejo · Acidez brillante</td>
+          </tr>
+          <tr>
+            <td class="nombre-proceso">Natural Oscilante</td>
+            <td class="codigo-proceso">NO-120</td>
+            <td><span class="canecas-count">2</span></td>
+            <td class="score">89.0 – 90.5</td>
+            <td class="duracion">120h con oscilaciones</td>
+            <td>Tropical · Vino · Complejo</td>
+          </tr>
+          <tr>
+            <td class="nombre-proceso">Clarity Select pH</td>
+            <td class="codigo-proceso">CSP-48</td>
+            <td><span class="canecas-count">2</span></td>
+            <td class="score">90.0 – 91.25</td>
+            <td class="duracion">48h + 24h semi-anaeróbica</td>
+            <td>Limpio · Definido · Acidez precisa</td>
+          </tr>
+          <tr>
+            <td class="nombre-proceso">Bionatural Selection X</td>
+            <td class="codigo-proceso">BNX-100</td>
+            <td><span class="canecas-count">3</span></td>
+            <td class="score">89.0 – 90.0</td>
+            <td class="duracion">72-100h semi-anaeróbica</td>
+            <td>Frutal intenso · Dulce · Fermentado controlado</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+</div><!-- /page -->
+
+<!-- ╔══════════════════════════════════════════════╗ -->
+<!-- ║                  FOOTER                     ║ -->
+<!-- ╚══════════════════════════════════════════════╝ -->
+<footer>
+  <div class="footer-brand">La Palma y el Tucán <span>©</span> 2026 — Coffee Fermentation Lab</div>
+  <div class="footer-note">Sistema en fase de prototipo · Datos de demostración · Sensores IoT (ESP32 + Atlas Scientific) no conectados</div>
+</footer>
+
+
+<script>
+/* ═══════════════════════════════════════════════════════
+   DATOS MOCK — basados en protocolos Katherine / Felipe
+   ═══════════════════════════════════════════════════════ */
+
+const CANECAS = [
+  // LPX-500 (3 canecas) — Láctico Modular — pH inicio 5.0-5.4 → objetivo 3.8 ± 0.1
+  {
+    id: 'LPET-C01', proceso: 'LPX-500', badgeClass: 'badge-lpx',
+    variedad: 'Geisha', ph: 4.12, phObj: 3.8,
+    temp: 21.4, brix: 10.4,
+    horasActual: 48, horasTotal: 96,
+    estado: 'ok'
+  },
+  {
+    id: 'LPET-C02', proceso: 'LPX-500', badgeClass: 'badge-lpx',
+    variedad: 'Sidra', ph: 3.84, phObj: 3.8,
+    temp: 20.8, brix: 3.9,
+    horasActual: 94, horasTotal: 96,
+    estado: 'ok',  // pH casi en objetivo — listo
+    listo: true
+  },
+  {
+    id: 'LPET-C03', proceso: 'LPX-500', badgeClass: 'badge-lpx',
+    variedad: 'Tekisik', ph: 4.45, phObj: 3.8,
+    temp: 26.4, brix: 14.2,
+    horasActual: 22, horasTotal: 96,
+    estado: 'warn'  // temp > 26°C
+  },
+
+  // BIW-200 (2 canecas) — Bio-Innovation Washed — pH 5.3 → 3.8
+  {
+    id: 'LPET-C04', proceso: 'BIW-200', badgeClass: 'badge-biw',
+    variedad: 'Geisha', ph: 4.18, phObj: 3.8,
+    temp: 23.1, brix: 8.7,
+    horasActual: 72, horasTotal: 110,
+    estado: 'ok'
+  },
+  {
+    id: 'LPET-C05', proceso: 'BIW-200', badgeClass: 'badge-biw',
+    variedad: 'Bourbon Amarillo', ph: 4.62, phObj: 3.8,
+    temp: 22.5, brix: 13.4,
+    horasActual: 36, horasTotal: 110,
+    estado: 'ok'
+  },
+
+  // NO-120 (2 canecas) — Natural Oscilante — pH 5.0 → 3.9-4.1
+  {
+    id: 'LPET-C06', proceso: 'NO-120', badgeClass: 'badge-no',
+    variedad: 'Tabi', ph: 4.32, phObj: 4.0,
+    temp: 24.8, brix: 11.6,
+    horasActual: 72, horasTotal: 120,
+    estado: 'ok'
+  },
+  {
+    id: 'LPET-C07', proceso: 'NO-120', badgeClass: 'badge-no',
+    variedad: 'Bourbon Amarillo', ph: 4.88, phObj: 4.0,
+    temp: 19.3, brix: 15.2,
+    horasActual: 24, horasTotal: 120,
+    estado: 'ok'
+  },
+
+  // CSP-48 (2 canecas) — Clarity Select pH — pH 5.2-5.4 → 3.9 ± 0.05
+  {
+    id: 'LPET-C08', proceso: 'CSP-48', badgeClass: 'badge-csp',
+    variedad: 'Geisha', ph: 3.82, phObj: 3.9,
+    temp: 24.2, brix: 2.8,
+    horasActual: 48, horasTotal: 72,
+    estado: 'ok',
+    listo: true  // pH objetivo alcanzado
+  },
+  {
+    id: 'LPET-C09', proceso: 'CSP-48', badgeClass: 'badge-csp',
+    variedad: 'Tekisik', ph: 4.38, phObj: 3.9,
+    temp: 23.9, brix: 10.1,
+    horasActual: 24, horasTotal: 72,
+    estado: 'warn'  // velocidad pH baja
+  },
+
+  // BNX-100 (3 canecas) — Bionatural Selection X — pH 4.8-5.0 → 3.5-3.8
+  {
+    id: 'LPET-C10', proceso: 'BNX-100', badgeClass: 'badge-bnx',
+    variedad: 'Tabi', ph: 3.94, phObj: 3.65,
+    temp: 22.7, brix: 6.3,
+    horasActual: 72, horasTotal: 100,
+    estado: 'ok'
+  },
+  {
+    id: 'LPET-C11', proceso: 'BNX-100', badgeClass: 'badge-bnx',
+    variedad: 'Bourbon Amarillo', ph: 4.21, phObj: 3.65,
+    temp: 21.8, brix: 9.8,
+    horasActual: 48, horasTotal: 100,
+    estado: 'ok'
+  },
+  {
+    id: 'LPET-C12', proceso: 'BNX-100', badgeClass: 'badge-bnx',
+    variedad: 'Geisha', ph: 4.72, phObj: 3.65,
+    temp: 23.4, brix: 14.7,
+    horasActual: 12, horasTotal: 100,
+    estado: 'ok'
+  }
+];
+
+/* ── Render canecas ── */
+function renderCanecas() {
+  const grid = document.getElementById('canecas-grid');
+
+  CANECAS.forEach(c => {
+    const pct = Math.round((c.horasActual / c.horasTotal) * 100);
+    const fillClass = c.estado === 'warn' ? 'fill-warn' : c.listo ? 'fill-ok' : 'fill-gold';
+    const phClass = c.listo ? 'caneca-row-val ok-val' : c.estado === 'warn' ? 'caneca-row-val warn-val' : 'caneca-row-val highlight';
+    const tempClass = c.estado === 'warn' ? 'caneca-row-val warn-val' : 'caneca-row-val';
+
+    const card = document.createElement('div');
+    card.className = 'caneca-card';
+    card.innerHTML = `
+      <div class="caneca-header">
+        <div class="caneca-id">${c.id}</div>
+        <div class="status-dot ${c.estado}"></div>
+      </div>
+      <div>
+        <span class="proceso-badge ${c.badgeClass}">${c.proceso}</span>
+      </div>
+      <div class="caneca-variedad">${c.variedad}</div>
+      <div class="caneca-row">
+        <span class="caneca-row-label">pH actual → objetivo</span>
+        <span class="${phClass}">${c.ph.toFixed(2)} → ${c.phObj.toFixed(1)}</span>
+      </div>
+      <div class="caneca-row">
+        <span class="caneca-row-label">Temperatura</span>
+        <span class="${tempClass}">${c.temp.toFixed(1)}°C</span>
+      </div>
+      <div class="caneca-row">
+        <span class="caneca-row-label">Brix</span>
+        <span class="caneca-row-val">${c.brix.toFixed(1)} °Bx</span>
+      </div>
+      <div class="tiempo-bar">
+        <div class="tiempo-bar-labels">
+          <span>${c.horasActual}h transcurridas</span>
+          <span>/ ${c.horasTotal}h</span>
+        </div>
+        <div class="tiempo-bar-track">
+          <div class="tiempo-bar-fill ${fillClass}" style="width:${pct}%"></div>
+        </div>
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+/* ══════════════════════════════════════════════════════
+   CHART.JS — Datos mock realistas según protocolos
+   ══════════════════════════════════════════════════════ */
+
+// Eje X: horas 0, 6, 12, 24, 48, 72, 96
+const horas = [0, 6, 12, 24, 48, 72, 96];
+
+// ── Chart pH ──
+// C01 (LPX-500/Geisha) — anaeróbico, baja lento hasta 3.8
+// C04 (BIW-200/Geisha) — bifásico, baja a 3.8, solo 72h representadas
+// C10 (BNX-100/Tabi)   — semi-anaeróbico, parte de 4.9 → 3.5-3.8
+const phData = {
+  c01_lpx: [5.21, 5.08, 4.92, 4.68, 4.12, 3.93, 3.84],  // LPX-500
+  c04_biw: [5.30, 5.18, 5.05, 4.72, 4.18, 3.86, null],   // BIW-200 (en 96h aún no termina)
+  c10_bnx: [4.90, 4.77, 4.62, 4.38, 4.21, 3.94, 3.71]   // BNX-100
+};
+
+// ── Chart Temperatura ──
+// C01 LPX-500: se mantiene 18-24°C, ciclos noche/día pero estables
+// C06 NO-120: oscilación clara día/noche (proceso de oscilación térmica)
+// C08 CSP-48: constante ~24°C (proceso de temperatura constante)
+const tempData = {
+  c01_lpx: [21.2, 20.8, 21.5, 22.1, 21.4, 20.9, 21.7],  // Estable 20-22°C
+  c06_no:  [25.4, 22.1, 19.8, 26.2, 19.5, 25.1, 18.9],  // Oscilación día/noche
+  c08_csp: [24.0, 23.8, 24.2, 24.1, 24.3, 23.9, 24.1]   // Constante ~24°C
+};
+
+// ── Chart Brix ──
+// Todos bajan progresivamente (consumo de azúcares por fermentación)
+const brixData = {
+  c01_lpx: [18.5, 17.8, 16.9, 15.2, 10.4, 7.1, 3.9],
+  c04_biw: [19.2, 18.6, 17.7, 15.8, 8.7,  5.4, null],
+  c10_bnx: [18.8, 17.9, 17.0, 15.4, 9.8,  6.3, 4.1]
+};
+
+const chartDefaults = {
+  responsive: true,
+  maintainAspectRatio: false,
+  plugins: {
+    legend: {
+      position: 'bottom',
+      labels: {
+        color: '#9e9e9e',
+        font: { family: 'Jost', size: 11 },
+        boxWidth: 12,
+        padding: 12
+      }
+    },
+    tooltip: {
+      backgroundColor: '#3a3b3c',
+      borderColor: 'rgba(201,162,39,0.3)',
+      borderWidth: 1,
+      titleColor: '#C9A227',
+      bodyColor: '#F5F1EB',
+      titleFont: { family: 'Jost', size: 11 },
+      bodyFont: { family: 'Jost', size: 11 },
+      padding: 10
+    }
+  },
+  scales: {
+    x: {
+      grid: { color: 'rgba(255,255,255,0.05)' },
+      ticks: { color: '#9e9e9e', font: { family: 'Jost', size: 10 } },
+      title: {
+        display: true,
+        text: 'Horas de fermentación',
+        color: '#9e9e9e',
+        font: { family: 'Jost', size: 10 }
+      }
+    },
+    y: {
+      grid: { color: 'rgba(255,255,255,0.05)' },
+      ticks: { color: '#9e9e9e', font: { family: 'Jost', size: 10 } }
+    }
+  }
+};
+
+function lineDataset(label, data, color) {
+  return {
+    label,
+    data,
+    borderColor: color,
+    backgroundColor: color + '18',
+    borderWidth: 2,
+    pointRadius: 4,
+    pointBackgroundColor: color,
+    pointBorderColor: '#2C2D2E',
+    pointBorderWidth: 1,
+    tension: 0.4,
+    spanGaps: false
+  };
+}
+
+/* Chart pH */
+new Chart(document.getElementById('chartPH'), {
+  type: 'line',
+  data: {
+    labels: horas.map(h => h + 'h'),
+    datasets: [
+      lineDataset('C01 – LPX-500 / Geisha',        phData.c01_lpx, '#E8838C'),
+      lineDataset('C04 – BIW-200 / Geisha',         phData.c04_biw, '#C9A227'),
+      lineDataset('C10 – BNX-100 / Tabi',           phData.c10_bnx, '#4ade80')
+    ]
+  },
+  options: {
+    ...chartDefaults,
+    scales: {
+      ...chartDefaults.scales,
+      y: {
+        ...chartDefaults.scales.y,
+        min: 3.4,
+        max: 5.5,
+        title: { display: true, text: 'pH', color: '#9e9e9e', font: { family: 'Jost', size: 10 } }
+      }
+    }
+  }
+});
+
+/* Chart Temperatura */
+new Chart(document.getElementById('chartTemp'), {
+  type: 'line',
+  data: {
+    labels: horas.map(h => h + 'h'),
+    datasets: [
+      lineDataset('C01 – LPX-500 / Geisha',         tempData.c01_lpx, '#E8838C'),
+      lineDataset('C06 – NO-120 / Tabi (oscilante)', tempData.c06_no,  '#C9A227'),
+      lineDataset('C08 – CSP-48 / Geisha (constante)',tempData.c08_csp,'#93c5fd')
+    ]
+  },
+  options: {
+    ...chartDefaults,
+    scales: {
+      ...chartDefaults.scales,
+      y: {
+        ...chartDefaults.scales.y,
+        min: 17,
+        max: 28,
+        title: { display: true, text: '°C', color: '#9e9e9e', font: { family: 'Jost', size: 10 } }
+      }
+    }
+  }
+});
+
+/* Chart Brix */
+new Chart(document.getElementById('chartBrix'), {
+  type: 'line',
+  data: {
+    labels: horas.map(h => h + 'h'),
+    datasets: [
+      lineDataset('C01 – LPX-500 / Geisha', brixData.c01_lpx, '#E8838C'),
+      lineDataset('C04 – BIW-200 / Geisha', brixData.c04_biw, '#C9A227'),
+      lineDataset('C10 – BNX-100 / Tabi',   brixData.c10_bnx, '#4ade80')
+    ]
+  },
+  options: {
+    ...chartDefaults,
+    scales: {
+      ...chartDefaults.scales,
+      y: {
+        ...chartDefaults.scales.y,
+        min: 0,
+        max: 22,
+        title: { display: true, text: '°Bx', color: '#9e9e9e', font: { family: 'Jost', size: 10 } }
+      }
+    }
+  }
+});
+
+/* Inicializar */
+renderCanecas();
+
+</script>
+</body>
+</html>
