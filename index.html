@@ -13,16 +13,16 @@
 
     :root {
       /* Fondos */
-      --dark:   #2C2D2E;      /* Carbón — fondo principal */
-      --dark2:  #3a3b3c;      /* Carbón medio — tarjetas */
-      --dark3:  #484949;      /* Carbón claro — elementos */
+      --dark:   #2C2D2E;
+      --dark2:  #3a3b3c;
+      --dark3:  #484949;
 
       /* Marca LP&ET */
-      --gold:   #CB9F5B;      /* Dorado La Palma — títulos, acentos */
-      --pink:   #ED728B;      /* Rosa Vibrante — CTAs, highlights */
-      --light:  #FCF7EC;      /* Crema — texto principal */
+      --gold:   #CB9F5B;
+      --pink:   #ED728B;
+      --light:  #FCF7EC;
 
-      /* Pasteles (badges, tags) */
+      /* Pasteles */
       --rosa-empaque: #F7C7C7;
       --rosa-blush:   #FFF1F2;
       --miel:         #FEF9C3;
@@ -30,13 +30,13 @@
       --beige:        #FAF9F5;
 
       /* Estados */
-      --ok:     #4ade80;      /* OK / éxito */
-      --warn:   #facc15;      /* Advertencia */
-      --crit:   #ef4444;      /* Crítico */
+      --ok:     #4ade80;
+      --warn:   #facc15;
+      --crit:   #ef4444;
 
       /* Neutros */
       --muted:  #9e9e9e;
-      --border: rgba(203,159,91,0.25);  /* Borde dorado suave */
+      --border: rgba(203,159,91,0.25);
       --radius: 12px;
       --gap:    20px;
     }
@@ -62,11 +62,10 @@
     header {
       position: sticky;
       top: 0;
-      z-index: 100;
-      background: rgba(44,45,46,0.95);
+      z-index: 200;
+      background: rgba(44,45,46,0.97);
       backdrop-filter: blur(8px);
       border-bottom: 1px solid var(--border);
-      padding: 16px var(--gap);
     }
     .header-inner {
       max-width: 1400px;
@@ -76,6 +75,7 @@
       justify-content: space-between;
       gap: 12px;
       flex-wrap: wrap;
+      padding: 16px var(--gap);
     }
     .header-brand h1 {
       font-family: 'Baskervville', serif;
@@ -97,10 +97,7 @@
       gap: 12px;
       flex-wrap: wrap;
     }
-    .last-update {
-      font-size: 0.72rem;
-      color: var(--muted);
-    }
+    .last-update { font-size: 0.72rem; color: var(--muted); }
     .last-update strong { color: var(--ok); }
     .badge-demo {
       background: rgba(232,131,140,0.15);
@@ -113,6 +110,52 @@
       padding: 3px 10px;
       border-radius: 20px;
     }
+
+    /* ── BARRA DE FILTROS ── */
+    .filtros-bar {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 10px var(--gap);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      border-top: 1px solid rgba(255,255,255,0.04);
+    }
+    .filtro-label {
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--muted);
+      margin-right: 4px;
+    }
+    .filtro-btn {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      font-family: 'Jost', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.4px;
+      padding: 5px 14px;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: all 0.18s ease;
+    }
+    .filtro-btn:hover {
+      border-color: var(--gold);
+      color: var(--gold);
+    }
+    .filtro-btn.active {
+      color: var(--dark);
+      font-weight: 700;
+    }
+    .filtro-btn[data-proceso="todos"].active { background: var(--light); border-color: var(--light); }
+    .filtro-btn[data-proceso="LPX-500"].active { background: var(--pink); border-color: var(--pink); }
+    .filtro-btn[data-proceso="BIW-200"].active { background: var(--gold); border-color: var(--gold); }
+    .filtro-btn[data-proceso="NO-120"].active  { background: var(--ok);   border-color: var(--ok); }
+    .filtro-btn[data-proceso="CSP-48"].active  { background: #93c5fd;     border-color: #93c5fd; }
+    .filtro-btn[data-proceso="BNX-100"].active { background: var(--warn); border-color: var(--warn); }
 
     /* ── Section titles ── */
     .section-title {
@@ -177,11 +220,7 @@
       line-height: 1;
     }
     .kpi-value span { font-size: 1rem; color: var(--muted); font-family: 'Jost', sans-serif; font-weight: 400; }
-    .kpi-sub {
-      font-size: 0.72rem;
-      color: var(--muted);
-      margin-top: 6px;
-    }
+    .kpi-sub { font-size: 0.72rem; color: var(--muted); margin-top: 6px; }
     .progress-bar {
       margin-top: 10px;
       height: 4px;
@@ -194,6 +233,66 @@
       background: var(--gold);
       border-radius: 2px;
       transition: width 0.6s ease;
+    }
+
+    /* ── Grupo de proceso ── */
+    .grupo-proceso {
+      margin-bottom: 32px;
+    }
+    .grupo-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 16px;
+      border-radius: var(--radius) var(--radius) 0 0;
+      background: var(--dark2);
+      border: 1px solid var(--border);
+      border-bottom: none;
+      margin-bottom: 0;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .grupo-header-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex: 1;
+    }
+    .grupo-stripe {
+      width: 5px;
+      height: 36px;
+      border-radius: 3px;
+      flex-shrink: 0;
+    }
+    .grupo-nombre {
+      font-family: 'Baskervville', serif;
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--light);
+    }
+    .grupo-codigo {
+      font-family: monospace;
+      font-size: 0.75rem;
+      color: var(--gold);
+    }
+    .grupo-stats {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .grupo-stat {
+      font-size: 0.7rem;
+      color: var(--muted);
+    }
+    .grupo-stat strong { color: var(--light); font-weight: 600; }
+    .grupo-stat .val-ok { color: var(--ok); }
+    .grupo-stat .val-score { color: var(--gold); }
+    .grupo-canecas-wrap {
+      border: 1px solid var(--border);
+      border-radius: 0 0 var(--radius) var(--radius);
+      padding: 16px;
+      background: rgba(44,45,46,0.5);
     }
 
     /* ── Canecas grid ── */
@@ -209,10 +308,12 @@
       padding: 16px;
       position: relative;
       transition: transform 0.2s, box-shadow 0.2s;
+      cursor: pointer;
     }
     .caneca-card:hover {
       transform: translateY(-2px);
       box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+      border-color: rgba(203,159,91,0.5);
     }
     .caneca-header {
       display: flex;
@@ -243,13 +344,30 @@
       letter-spacing: 0.5px;
       padding: 2px 8px;
       border-radius: 20px;
-      margin-bottom: 10px;
+      margin-bottom: 6px;
     }
     .badge-lpx { background: rgba(232,131,140,0.15); color: var(--pink); border: 1px solid rgba(232,131,140,0.4); }
     .badge-biw { background: rgba(201,162,39,0.15);  color: var(--gold); border: 1px solid rgba(201,162,39,0.4); }
     .badge-no  { background: rgba(74,222,128,0.12);  color: var(--ok);   border: 1px solid rgba(74,222,128,0.3); }
     .badge-csp { background: rgba(147,197,253,0.12); color: #93c5fd;     border: 1px solid rgba(147,197,253,0.3); }
     .badge-bnx { background: rgba(250,204,21,0.12);  color: var(--warn); border: 1px solid rgba(250,204,21,0.3); }
+
+    /* Etapa badge */
+    .etapa-badge {
+      display: inline-block;
+      font-size: 0.58rem;
+      font-weight: 600;
+      letter-spacing: 0.4px;
+      padding: 2px 7px;
+      border-radius: 20px;
+      margin-left: 6px;
+      vertical-align: middle;
+    }
+    .etapa-setup      { background: rgba(158,158,158,0.15); color: var(--muted); border: 1px solid rgba(158,158,158,0.3); }
+    .etapa-fermentando{ background: rgba(74,222,128,0.1);  color: var(--ok);   border: 1px solid rgba(74,222,128,0.25); }
+    .etapa-checkpoint  { background: rgba(147,197,253,0.12);color: #93c5fd;     border: 1px solid rgba(147,197,253,0.3); }
+    .etapa-objetivo    { background: rgba(203,159,91,0.15); color: var(--gold); border: 1px solid rgba(203,159,91,0.35); }
+    .etapa-listo       { background: rgba(74,222,128,0.18); color: var(--ok);   border: 1px solid rgba(74,222,128,0.4);  font-style: italic; }
 
     .caneca-row {
       display: flex;
@@ -262,6 +380,7 @@
     .caneca-row-val.highlight { color: var(--gold); font-weight: 600; }
     .caneca-row-val.ok-val    { color: var(--ok); }
     .caneca-row-val.warn-val  { color: var(--warn); }
+    .caneca-row-val.crit-val  { color: var(--crit); }
 
     .caneca-variedad {
       font-size: 0.72rem;
@@ -270,9 +389,7 @@
       font-style: italic;
     }
 
-    .tiempo-bar {
-      margin-top: 12px;
-    }
+    .tiempo-bar { margin-top: 12px; }
     .tiempo-bar-labels {
       display: flex;
       justify-content: space-between;
@@ -296,6 +413,22 @@
     .fill-gold { background: var(--gold); }
     .fill-crit { background: var(--crit); }
 
+    /* ── Vel pH indicador ── */
+    .vel-ph-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 5px;
+    }
+    .vel-ph-val {
+      font-size: 0.78rem;
+      font-weight: 600;
+      font-family: monospace;
+    }
+    .vel-ok   { color: var(--ok); }
+    .vel-warn { color: var(--warn); }
+    .vel-crit { color: var(--crit); }
+
     /* ── Charts ── */
     .charts-grid {
       display: grid;
@@ -314,10 +447,60 @@
       color: var(--light);
       text-transform: uppercase;
       letter-spacing: 0.6px;
-      margin-bottom: 16px;
+      margin-bottom: 10px;
     }
     .chart-title span { color: var(--gold); }
     .chart-wrap { position: relative; height: 200px; }
+
+    /* ── Selector de canecas en gráfico ── */
+    .chart-selector {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .chart-selector-label {
+      font-size: 0.62rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-right: 4px;
+    }
+    .caneca-toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: transparent;
+      border: 1px solid rgba(255,255,255,0.1);
+      color: var(--muted);
+      font-family: 'Jost', sans-serif;
+      font-size: 0.65rem;
+      font-weight: 500;
+      padding: 3px 8px;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .caneca-toggle:hover { border-color: var(--gold); color: var(--gold); }
+    .caneca-toggle.active {
+      color: var(--dark);
+      font-weight: 700;
+    }
+    .caneca-toggle .toggle-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .chart-max-warn {
+      font-size: 0.65rem;
+      color: var(--warn);
+      margin-left: 6px;
+      display: none;
+    }
 
     /* ── Alertas ── */
     .alertas-list { display: flex; flex-direction: column; gap: 10px; }
@@ -353,11 +536,7 @@
       min-width: 82px;
       flex-shrink: 0;
     }
-    .alerta-tipo {
-      font-size: 0.72rem;
-      font-weight: 500;
-      color: var(--light);
-    }
+    .alerta-tipo { font-size: 0.72rem; font-weight: 500; color: var(--light); }
     .alerta-msg {
       font-size: 0.7rem;
       color: var(--muted);
@@ -371,11 +550,7 @@
       border-radius: var(--radius);
       border: 1px solid var(--border);
     }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      background: var(--dark2);
-    }
+    table { width: 100%; border-collapse: collapse; background: var(--dark2); }
     th {
       background: var(--dark3);
       color: var(--muted);
@@ -415,6 +590,216 @@
       padding: 0 8px;
     }
 
+    /* ══════════════════════════════
+       MODAL DE DETALLE
+       ══════════════════════════════ */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.75);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+    }
+    .modal-overlay.visible {
+      opacity: 1;
+      pointer-events: all;
+    }
+    .modal-box {
+      background: var(--dark2);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      width: 100%;
+      max-width: 720px;
+      max-height: 90vh;
+      overflow-y: auto;
+      transform: scale(0.93);
+      transition: transform 0.25s ease;
+      position: relative;
+    }
+    .modal-overlay.visible .modal-box {
+      transform: scale(1);
+    }
+    .modal-header {
+      padding: 20px 24px 16px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .modal-titulo {
+      font-family: 'Baskervville', serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--light);
+    }
+    .modal-titulo span { color: var(--gold); }
+    .modal-subtitulo {
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+    .modal-estado-badge {
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 20px;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      margin-top: 6px;
+      display: inline-block;
+    }
+    .modal-estado-ok   { background: rgba(74,222,128,0.15); color: var(--ok);   border: 1px solid rgba(74,222,128,0.4); }
+    .modal-estado-warn { background: rgba(250,204,21,0.12);  color: var(--warn); border: 1px solid rgba(250,204,21,0.35); }
+    .modal-estado-crit { background: rgba(239,68,68,0.12);   color: var(--crit); border: 1px solid rgba(239,68,68,0.35); }
+    .modal-close {
+      background: transparent;
+      border: 1px solid rgba(255,255,255,0.12);
+      color: var(--muted);
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      font-size: 1rem;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      transition: all 0.15s;
+    }
+    .modal-close:hover { border-color: var(--crit); color: var(--crit); }
+    .modal-body { padding: 20px 24px; }
+
+    .modal-metricas-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+    .modal-metrica {
+      background: var(--dark3);
+      border-radius: 10px;
+      padding: 14px;
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+    .modal-metrica-label {
+      font-size: 0.62rem;
+      text-transform: uppercase;
+      letter-spacing: 0.7px;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+    .modal-metrica-val {
+      font-family: 'Baskervville', serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      line-height: 1;
+    }
+    .modal-metrica-unit {
+      font-family: 'Jost', sans-serif;
+      font-size: 0.75rem;
+      color: var(--muted);
+      font-weight: 400;
+    }
+
+    /* Timeline de checkpoints */
+    .modal-section-title {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--muted);
+      margin-bottom: 12px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .modal-section { margin-bottom: 22px; }
+
+    .timeline-checkpoints {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      position: relative;
+      padding: 20px 0 10px;
+    }
+    .timeline-step {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+    }
+    .timeline-step:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      top: 9px;
+      left: 50%;
+      width: 100%;
+      height: 2px;
+      background: rgba(255,255,255,0.1);
+      z-index: 0;
+    }
+    .timeline-step.passed:not(:last-child)::after { background: rgba(74,222,128,0.4); }
+    .timeline-dot {
+      width: 18px; height: 18px;
+      border-radius: 50%;
+      background: var(--dark3);
+      border: 2px solid rgba(255,255,255,0.15);
+      z-index: 1;
+      flex-shrink: 0;
+      transition: all 0.2s;
+    }
+    .timeline-step.passed .timeline-dot  { background: rgba(74,222,128,0.3); border-color: var(--ok); }
+    .timeline-step.current .timeline-dot { background: var(--gold); border-color: var(--gold); box-shadow: 0 0 8px rgba(203,159,91,0.6); }
+    .timeline-hora {
+      font-size: 0.62rem;
+      color: var(--muted);
+      margin-top: 6px;
+      font-weight: 500;
+    }
+    .timeline-step.passed  .timeline-hora { color: var(--ok); }
+    .timeline-step.current .timeline-hora { color: var(--gold); font-weight: 700; }
+    .timeline-label {
+      font-size: 0.58rem;
+      color: rgba(158,158,158,0.6);
+      margin-top: 2px;
+      text-align: center;
+    }
+
+    /* Mini chart modal */
+    .modal-chart-wrap { position: relative; height: 160px; margin-top: 8px; }
+
+    /* Rangos protocolo */
+    .modal-rangos-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 10px;
+    }
+    .modal-rango {
+      background: var(--dark3);
+      border-radius: 8px;
+      padding: 10px 12px;
+      border: 1px solid rgba(255,255,255,0.05);
+    }
+    .modal-rango-label { font-size: 0.62rem; color: var(--muted); margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .modal-rango-val { font-size: 0.82rem; color: var(--light); font-weight: 500; }
+
+    /* Alertas del modal */
+    .modal-alertas { display: flex; flex-direction: column; gap: 8px; }
+    .modal-alerta-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(0,0,0,0.2);
+      border-radius: 8px;
+      padding: 10px 12px;
+      font-size: 0.75rem;
+      color: var(--light);
+    }
+    .modal-alerta-vacio { font-size: 0.75rem; color: var(--muted); font-style: italic; }
+
     /* ── Footer ── */
     footer {
       margin-top: 56px;
@@ -422,11 +807,7 @@
       border-top: 1px solid var(--border);
       text-align: center;
     }
-    .footer-brand {
-      font-family: 'Baskervville', serif;
-      font-size: 0.9rem;
-      color: var(--muted);
-    }
+    .footer-brand { font-family: 'Baskervville', serif; font-size: 0.9rem; color: var(--muted); }
     .footer-brand span { color: var(--gold); }
     .footer-note {
       font-size: 0.68rem;
@@ -442,13 +823,32 @@
       .canecas-grid { grid-template-columns: 1fr 1fr; }
       .alerta-msg { display: none; }
       .charts-grid { grid-template-columns: 1fr; }
+      .modal-metricas-grid { grid-template-columns: repeat(2, 1fr); }
     }
     @media (max-width: 420px) {
       .canecas-grid { grid-template-columns: 1fr; }
+      .modal-metricas-grid { grid-template-columns: 1fr 1fr; }
     }
   </style>
 </head>
 <body>
+
+<!-- MODAL DE DETALLE -->
+<div class="modal-overlay" id="modal" role="dialog" aria-modal="true" aria-label="Detalle de caneca">
+  <div class="modal-box" id="modal-box">
+    <div class="modal-header">
+      <div>
+        <div class="modal-titulo" id="modal-titulo">LPET-C01 — <span>LPX-500</span></div>
+        <div class="modal-subtitulo" id="modal-subtitulo">Geisha · 48h transcurridas</div>
+        <span class="modal-estado-badge modal-estado-ok" id="modal-estado-badge">OK</span>
+      </div>
+      <button class="modal-close" id="modal-close" aria-label="Cerrar">✕</button>
+    </div>
+    <div class="modal-body" id="modal-body">
+      <!-- Contenido generado por JS -->
+    </div>
+  </div>
+</div>
 
 <!-- ╔══════════════════════════════════════════════╗ -->
 <!-- ║                  HEADER                     ║ -->
@@ -460,9 +860,19 @@
       <p>Monitoreo IoT de fermentación de café · Sistema de Control de Procesos</p>
     </div>
     <div class="header-meta">
-      <span class="last-update">Última actualización: <strong>hace 2 minutos</strong> · 06 Abr 2026, 14:37</span>
+      <span class="last-update">Última actualización: <strong>hace 2 minutos</strong> · 13 Abr 2026, 09:00</span>
       <span class="badge-demo">Datos de prueba</span>
     </div>
+  </div>
+  <!-- Barra de filtros por proceso -->
+  <div class="filtros-bar">
+    <span class="filtro-label">Filtrar:</span>
+    <button class="filtro-btn active" data-proceso="todos">Todos</button>
+    <button class="filtro-btn" data-proceso="LPX-500">LPX-500</button>
+    <button class="filtro-btn" data-proceso="BIW-200">BIW-200</button>
+    <button class="filtro-btn" data-proceso="NO-120">NO-120</button>
+    <button class="filtro-btn" data-proceso="CSP-48">CSP-48</button>
+    <button class="filtro-btn" data-proceso="BNX-100">BNX-100</button>
   </div>
 </header>
 
@@ -473,35 +883,8 @@
   <!-- ╚══════════════════════════════════════════════╝ -->
   <section class="section">
     <h2 class="section-title">Resumen operativo</h2>
-    <div class="kpi-grid">
-
-      <div class="kpi-card">
-        <div class="kpi-label">Canecas activas</div>
-        <div class="kpi-value">12 <span>/ 50</span></div>
-        <div class="kpi-sub">24% de capacidad en uso</div>
-        <div class="progress-bar">
-          <div class="progress-fill" style="width:24%"></div>
-        </div>
-      </div>
-
-      <div class="kpi-card">
-        <div class="kpi-label">Procesos en curso</div>
-        <div class="kpi-value">5</div>
-        <div class="kpi-sub">LPX-500 · BIW-200 · NO-120 · CSP-48 · BNX-100</div>
-      </div>
-
-      <div class="kpi-card alert-warn">
-        <div class="kpi-label">Alertas activas</div>
-        <div class="kpi-value">2</div>
-        <div class="kpi-sub" style="color:var(--warn)">1 advertencia · 1 revisión OK</div>
-      </div>
-
-      <div class="kpi-card alert-ok">
-        <div class="kpi-label">Lotes completados hoy</div>
-        <div class="kpi-value">3</div>
-        <div class="kpi-sub" style="color:var(--ok)">2 LPX · 1 CSP — Listos para despulpe</div>
-      </div>
-
+    <div class="kpi-grid" id="kpi-grid">
+      <!-- Generado por JS para que se actualice con filtros -->
     </div>
   </section>
 
@@ -509,9 +892,9 @@
   <!-- ║             CANECAS ACTIVAS                 ║ -->
   <!-- ╚══════════════════════════════════════════════╝ -->
   <section class="section">
-    <h2 class="section-title">Canecas activas <small>12 unidades monitoreadas en tiempo real</small></h2>
-    <div class="canecas-grid" id="canecas-grid">
-      <!-- generadas por JS -->
+    <h2 class="section-title" id="canecas-titulo">Canecas activas <small>12 unidades monitoreadas</small></h2>
+    <div id="canecas-container">
+      <!-- Generado por JS: modo agrupado (todos) o lista plana (filtro) -->
     </div>
   </section>
 
@@ -519,11 +902,16 @@
   <!-- ║          CURVAS EN TIEMPO REAL              ║ -->
   <!-- ╚══════════════════════════════════════════════╝ -->
   <section class="section">
-    <h2 class="section-title">Curvas de fermentación <small>Últimas 96 horas — 3 canecas representativas</small></h2>
+    <h2 class="section-title">Curvas de fermentación <small>Selecciona canecas para comparar</small></h2>
     <div class="charts-grid">
 
       <div class="chart-card">
         <div class="chart-title"><span>pH</span> — Acidificación progresiva</div>
+        <div class="chart-selector" id="selector-ph">
+          <span class="chart-selector-label">Canecas:</span>
+          <!-- toggles generados por JS -->
+          <span class="chart-max-warn" id="max-warn-ph">Máx. 5 canecas</span>
+        </div>
         <div class="chart-wrap">
           <canvas id="chartPH"></canvas>
         </div>
@@ -531,6 +919,10 @@
 
       <div class="chart-card">
         <div class="chart-title"><span>Temperatura</span> — Oscilación controlada (°C)</div>
+        <div class="chart-selector" id="selector-temp">
+          <span class="chart-selector-label">Canecas:</span>
+          <span class="chart-max-warn" id="max-warn-temp">Máx. 5 canecas</span>
+        </div>
         <div class="chart-wrap">
           <canvas id="chartTemp"></canvas>
         </div>
@@ -538,6 +930,10 @@
 
       <div class="chart-card">
         <div class="chart-title"><span>Brix</span> — Consumo de azúcares (°Bx)</div>
+        <div class="chart-selector" id="selector-brix">
+          <span class="chart-selector-label">Canecas:</span>
+          <span class="chart-max-warn" id="max-warn-brix">Máx. 5 canecas</span>
+        </div>
         <div class="chart-wrap">
           <canvas id="chartBrix"></canvas>
         </div>
@@ -552,7 +948,6 @@
   <section class="section">
     <h2 class="section-title">Alertas recientes <small>Últimas 5 notificaciones del sistema</small></h2>
     <div class="alertas-list">
-
       <div class="alerta-item">
         <div class="alerta-dot warn"></div>
         <div class="alerta-tiempo">Hoy 14:12</div>
@@ -560,15 +955,13 @@
         <div class="alerta-tipo">Temperatura &gt; 26°C detectada</div>
         <div class="alerta-msg">Verificar ventilación del área — LPX-500</div>
       </div>
-
       <div class="alerta-item">
         <div class="alerta-dot ok"></div>
         <div class="alerta-tiempo">Hoy 13:45</div>
-        <div class="alerta-caneca">LPET-C07</div>
+        <div class="alerta-caneca">LPET-C08</div>
         <div class="alerta-tipo">pH objetivo alcanzado (3.82)</div>
         <div class="alerta-msg">Listo para iniciar despulpe — CSP-48</div>
       </div>
-
       <div class="alerta-item">
         <div class="alerta-dot ok"></div>
         <div class="alerta-tiempo">Hoy 12:00</div>
@@ -576,15 +969,13 @@
         <div class="alerta-tipo">Checkpoint 48h completado</div>
         <div class="alerta-msg">pH 4.12 · Brix 10.4 · Olor: Lácteo limpio — LPX-500</div>
       </div>
-
       <div class="alerta-item">
         <div class="alerta-dot warn"></div>
         <div class="alerta-tiempo">Hoy 09:30</div>
         <div class="alerta-caneca">LPET-C09</div>
         <div class="alerta-tipo">Velocidad de pH baja (&lt; 0.03 pH/h)</div>
-        <div class="alerta-msg">Verificar inóculo y temperatura — BNX-100</div>
+        <div class="alerta-msg">Verificar inóculo y temperatura — CSP-48</div>
       </div>
-
       <div class="alerta-item">
         <div class="alerta-dot ok"></div>
         <div class="alerta-tiempo">Hoy 06:00</div>
@@ -592,7 +983,6 @@
         <div class="alerta-tipo">Backup de datos completado</div>
         <div class="alerta-msg">12 canecas · 864 lecturas exportadas</div>
       </div>
-
     </div>
   </section>
 
@@ -628,15 +1018,15 @@
             <td><span class="canecas-count">2</span></td>
             <td class="score">89.5 – 91.0</td>
             <td class="duracion">90-110h + 12-24h oxidativa</td>
-            <td>Frutal complejo · Acidez brillante</td>
+            <td>Acidez compleja · Vinosidad · Florales</td>
           </tr>
           <tr>
             <td class="nombre-proceso">Natural Oscilante</td>
             <td class="codigo-proceso">NO-120</td>
             <td><span class="canecas-count">2</span></td>
             <td class="score">89.0 – 90.5</td>
-            <td class="duracion">120h con oscilaciones</td>
-            <td>Tropical · Vino · Complejo</td>
+            <td class="duracion">120h oscilación térmica</td>
+            <td>Fruta madura · Ron · Chocolate oscuro</td>
           </tr>
           <tr>
             <td class="nombre-proceso">Clarity Select pH</td>
@@ -644,15 +1034,15 @@
             <td><span class="canecas-count">2</span></td>
             <td class="score">90.0 – 91.25</td>
             <td class="duracion">48h + 24h semi-anaeróbica</td>
-            <td>Limpio · Definido · Acidez precisa</td>
+            <td>Elegante · Floral · pH controlado</td>
           </tr>
           <tr>
             <td class="nombre-proceso">Bionatural Selection X</td>
             <td class="codigo-proceso">BNX-100</td>
             <td><span class="canecas-count">3</span></td>
             <td class="score">89.0 – 90.0</td>
-            <td class="duracion">72-100h semi-anaeróbica</td>
-            <td>Frutal intenso · Dulce · Fermentado controlado</td>
+            <td class="duracion">72-100h anaeróbica</td>
+            <td>Uva negra · Moras · Chocolate oscuro</td>
           </tr>
         </tbody>
       </table>
@@ -671,127 +1061,327 @@
 
 
 <script>
-/* ═══════════════════════════════════════════════════════
-   DATOS MOCK — basados en protocolos Katherine / Felipe
-   ═══════════════════════════════════════════════════════ */
+/* ═══════════════════════════════════════════════════════════════════
+   DATOS MOCK — Basados en protocolos Katherine / Felipe
+   Expandidos con: velPH, phHistory, tempHistory, brixHistory, alertas
+   ═══════════════════════════════════════════════════════════════════ */
 
+// Horas de los checkpoints (eje X de los gráficos)
+const HORAS = [0, 6, 12, 24, 48, 72, 96];
+
+// ── Paleta de colores por caneca (para los charts) ──
+const CANECA_COLORS = [
+  '#ED728B', '#CB9F5B', '#4ade80', '#93c5fd', '#facc15',
+  '#c084fc', '#fb923c', '#34d399', '#f472b6', '#60a5fa',
+  '#a78bfa', '#2dd4bf'
+];
+
+// ── Protocolos (para el modal) ──
+const PROTOCOLOS = {
+  'LPX-500': {
+    nombre: 'Láctico Modular LPX',
+    phInicio: '5.0–5.4', phObjetivo: '3.8 ± 0.1',
+    tempRango: '18–24°C', brixInicio: '16–20', brixObjetivo: '≤ 4',
+    duracion: '96h + 24-36h baba', score: '89.5–90.5',
+    perfil: 'Cítrico · Floral · Dulce',
+    color: '#ED728B'
+  },
+  'BIW-200': {
+    nombre: 'Bio-Innovation Washed',
+    phInicio: '5.3', phObjetivo: '3.8',
+    tempRango: 'Monitorear cada 6h · HR <75%', brixInicio: '17–21', brixObjetivo: '≤ 3.5',
+    duracion: '90-110h + 12-24h oxidativa', score: '89.5–91.0',
+    perfil: 'Acidez compleja · Vinosidad · Florales',
+    color: '#CB9F5B'
+  },
+  'NO-120': {
+    nombre: 'Natural Oscilante',
+    phInicio: '5.0', phObjetivo: '3.9–4.1',
+    tempRango: 'Día 26-30°C / Noche 14-18°C', brixInicio: '18–22', brixObjetivo: '≤ 5',
+    duracion: '120h oscilación térmica', score: '89.0–90.5',
+    perfil: 'Fruta madura · Ron · Chocolate oscuro',
+    color: '#4ade80'
+  },
+  'CSP-48': {
+    nombre: 'Clarity Select pH',
+    phInicio: '5.2–5.4', phObjetivo: '3.9 ± 0.05',
+    tempRango: 'Monitorear cada 6h · zona fresca', brixInicio: '>18', brixObjetivo: '≤ 3',
+    duracion: '48h anaeróbica + 24h semi-anaeróbica', score: '90.0–91.25',
+    perfil: 'Elegante · Floral · pH controlado',
+    color: '#93c5fd'
+  },
+  'BNX-100': {
+    nombre: 'Bionatural Selection X',
+    phInicio: '5.2', phObjetivo: '3.8–4.0',
+    tempRango: 'Monitorear cada 6h · HR <80%', brixInicio: '17–20', brixObjetivo: '≤ 4',
+    duracion: '72-100h anaeróbica', score: '89.0–90.0',
+    perfil: 'Uva negra · Moras · Chocolate oscuro',
+    color: '#facc15'
+  }
+};
+
+// ── Info de grupos ──
+const GRUPOS_INFO = {
+  'LPX-500': { nombre: 'Láctico Modular LPX',   color: '#ED728B' },
+  'BIW-200': { nombre: 'Bio-Innovation Washed',  color: '#CB9F5B' },
+  'NO-120':  { nombre: 'Natural Oscilante',       color: '#4ade80' },
+  'CSP-48':  { nombre: 'Clarity Select pH',       color: '#93c5fd' },
+  'BNX-100': { nombre: 'Bionatural Selection X',  color: '#facc15' }
+};
+
+// ── Array de canecas con datos expandidos ──
 const CANECAS = [
-  // LPX-500 (3 canecas) — Láctico Modular — pH inicio 5.0-5.4 → objetivo 3.8 ± 0.1
+  /* ── LPX-500 ── */
   {
     id: 'LPET-C01', proceso: 'LPX-500', badgeClass: 'badge-lpx',
     variedad: 'Geisha', ph: 4.12, phObj: 3.8,
     temp: 21.4, brix: 10.4,
     horasActual: 48, horasTotal: 96,
-    estado: 'ok'
+    estado: 'ok',
+    velPH: -0.12,
+    phHistory:   [5.21, 5.08, 4.92, 4.68, 4.12, null, null],
+    tempHistory: [21.2, 20.8, 21.5, 22.1, 21.4, null, null],
+    brixHistory: [18.5, 17.8, 16.9, 15.2, 10.4, null, null],
+    alertas: ['Checkpoint 48h completado · pH 4.12 · Brix 10.4']
   },
   {
     id: 'LPET-C02', proceso: 'LPX-500', badgeClass: 'badge-lpx',
     variedad: 'Sidra', ph: 3.84, phObj: 3.8,
     temp: 20.8, brix: 3.9,
     horasActual: 94, horasTotal: 96,
-    estado: 'ok',  // pH casi en objetivo — listo
-    listo: true
+    estado: 'ok', listo: true,
+    velPH: -0.03,
+    phHistory:   [5.18, 5.02, 4.85, 4.55, 4.10, 3.92, 3.84],
+    tempHistory: [20.5, 20.2, 20.8, 21.0, 20.8, 20.5, 20.8],
+    brixHistory: [17.8, 17.1, 16.2, 14.6, 9.8,  5.8,  3.9],
+    alertas: ['pH objetivo alcanzado (3.84) · Listo para despulpe', 'Brix ≤ 4 confirmado']
   },
   {
     id: 'LPET-C03', proceso: 'LPX-500', badgeClass: 'badge-lpx',
     variedad: 'Tekisik', ph: 4.45, phObj: 3.8,
     temp: 26.4, brix: 14.2,
     horasActual: 22, horasTotal: 96,
-    estado: 'warn'  // temp > 26°C
+    estado: 'warn',
+    velPH: -0.18,
+    phHistory:   [5.15, 5.00, 4.82, 4.45, null, null, null],
+    tempHistory: [22.1, 23.5, 25.0, 26.4, null, null, null],
+    brixHistory: [18.2, 17.5, 16.5, 14.2, null, null, null],
+    alertas: ['⚠ Temperatura elevada: 26.4°C (máx recomendado 24°C)', '⚠ Vel. pH alta (-0.18): verificar temperatura']
   },
 
-  // BIW-200 (2 canecas) — Bio-Innovation Washed — pH 5.3 → 3.8
+  /* ── BIW-200 ── */
   {
     id: 'LPET-C04', proceso: 'BIW-200', badgeClass: 'badge-biw',
     variedad: 'Geisha', ph: 4.18, phObj: 3.8,
     temp: 23.1, brix: 8.7,
     horasActual: 72, horasTotal: 110,
-    estado: 'ok'
+    estado: 'ok',
+    velPH: -0.08,
+    phHistory:   [5.30, 5.18, 5.05, 4.72, 4.38, 4.18, null],
+    tempHistory: [22.8, 23.0, 23.2, 23.5, 23.1, 23.0, null],
+    brixHistory: [19.2, 18.6, 17.7, 15.8, 11.2, 8.7,  null],
+    alertas: []
   },
   {
     id: 'LPET-C05', proceso: 'BIW-200', badgeClass: 'badge-biw',
     variedad: 'Bourbon Amarillo', ph: 4.62, phObj: 3.8,
     temp: 22.5, brix: 13.4,
     horasActual: 36, horasTotal: 110,
-    estado: 'ok'
+    estado: 'ok',
+    velPH: -0.11,
+    phHistory:   [5.28, 5.14, 4.98, 4.75, 4.62, null, null],
+    tempHistory: [22.0, 22.2, 22.5, 22.8, 22.5, null, null],
+    brixHistory: [20.1, 19.4, 18.5, 16.8, 13.4, null, null],
+    alertas: []
   },
 
-  // NO-120 (2 canecas) — Natural Oscilante — pH 5.0 → 3.9-4.1
+  /* ── NO-120 ── */
   {
     id: 'LPET-C06', proceso: 'NO-120', badgeClass: 'badge-no',
     variedad: 'Tabi', ph: 4.32, phObj: 4.0,
     temp: 24.8, brix: 11.6,
     horasActual: 72, horasTotal: 120,
-    estado: 'ok'
+    estado: 'ok',
+    velPH: -0.07,
+    phHistory:   [5.05, 4.92, 4.75, 4.55, 4.42, 4.32, null],
+    tempHistory: [25.4, 22.1, 19.8, 26.2, 19.5, 24.8, null],
+    brixHistory: [19.8, 19.0, 18.2, 16.5, 13.8, 11.6, null],
+    alertas: []
   },
   {
     id: 'LPET-C07', proceso: 'NO-120', badgeClass: 'badge-no',
     variedad: 'Bourbon Amarillo', ph: 4.88, phObj: 4.0,
     temp: 19.3, brix: 15.2,
     horasActual: 24, horasTotal: 120,
-    estado: 'ok'
+    estado: 'ok',
+    velPH: -0.10,
+    phHistory:   [5.10, 4.98, 4.95, 4.88, null, null, null],
+    tempHistory: [26.2, 23.0, 21.0, 19.3, null, null, null],
+    brixHistory: [21.5, 20.8, 19.5, 15.2, null, null, null],
+    alertas: []
   },
 
-  // CSP-48 (2 canecas) — Clarity Select pH — pH 5.2-5.4 → 3.9 ± 0.05
+  /* ── CSP-48 ── */
   {
     id: 'LPET-C08', proceso: 'CSP-48', badgeClass: 'badge-csp',
     variedad: 'Geisha', ph: 3.82, phObj: 3.9,
     temp: 24.2, brix: 2.8,
     horasActual: 48, horasTotal: 72,
-    estado: 'ok',
-    listo: true  // pH objetivo alcanzado
+    estado: 'ok', listo: true,
+    velPH: -0.04,
+    phHistory:   [5.35, 5.20, 5.02, 4.68, 4.21, 3.95, 3.82],
+    tempHistory: [24.0, 23.8, 24.2, 24.1, 24.3, 23.9, 24.2],
+    brixHistory: [17.8, 17.0, 16.0, 13.8, 8.2,  4.5,  2.8],
+    alertas: ['pH objetivo alcanzado (3.82) · Listo para despulpe', 'Brix muy bajo (2.8°Bx) — confirmar con equipo']
   },
   {
     id: 'LPET-C09', proceso: 'CSP-48', badgeClass: 'badge-csp',
     variedad: 'Tekisik', ph: 4.38, phObj: 3.9,
     temp: 23.9, brix: 10.1,
     horasActual: 24, horasTotal: 72,
-    estado: 'warn'  // velocidad pH baja
+    estado: 'warn',
+    velPH: -0.02,
+    phHistory:   [5.38, 5.32, 5.25, 4.38, null, null, null],
+    tempHistory: [24.1, 24.0, 23.8, 23.9, null, null, null],
+    brixHistory: [18.5, 18.0, 17.2, 10.1, null, null, null],
+    alertas: ['⚠ Velocidad de pH muy baja (-0.02 pH/h) — verificar inóculo', '⚠ Revisar temperatura e inoculación']
   },
 
-  // BNX-100 (3 canecas) — Bionatural Selection X — pH 4.8-5.0 → 3.5-3.8
+  /* ── BNX-100 ── */
   {
     id: 'LPET-C10', proceso: 'BNX-100', badgeClass: 'badge-bnx',
-    variedad: 'Tabi', ph: 3.94, phObj: 3.65,
+    variedad: 'Tabi', ph: 3.94, phObj: 3.9,
     temp: 22.7, brix: 6.3,
     horasActual: 72, horasTotal: 100,
-    estado: 'ok'
+    estado: 'ok',
+    velPH: -0.05,
+    phHistory:   [4.95, 4.82, 4.68, 4.45, 4.21, 3.94, null],
+    tempHistory: [22.4, 22.6, 23.0, 22.8, 22.5, 22.7, null],
+    brixHistory: [18.8, 18.0, 17.0, 15.2, 11.4, 6.3,  null],
+    alertas: []
   },
   {
     id: 'LPET-C11', proceso: 'BNX-100', badgeClass: 'badge-bnx',
-    variedad: 'Bourbon Amarillo', ph: 4.21, phObj: 3.65,
+    variedad: 'Bourbon Amarillo', ph: 4.21, phObj: 3.9,
     temp: 21.8, brix: 9.8,
     horasActual: 48, horasTotal: 100,
-    estado: 'ok'
+    estado: 'ok',
+    velPH: -0.09,
+    phHistory:   [4.88, 4.75, 4.60, 4.42, 4.21, null, null],
+    tempHistory: [21.5, 21.8, 22.0, 21.8, 21.8, null, null],
+    brixHistory: [19.5, 18.8, 17.8, 15.8, 9.8,  null, null],
+    alertas: []
   },
   {
     id: 'LPET-C12', proceso: 'BNX-100', badgeClass: 'badge-bnx',
-    variedad: 'Geisha', ph: 4.72, phObj: 3.65,
+    variedad: 'Geisha', ph: 4.72, phObj: 3.9,
     temp: 23.4, brix: 14.7,
     horasActual: 12, horasTotal: 100,
-    estado: 'ok'
+    estado: 'ok',
+    velPH: -0.14,
+    phHistory:   [4.92, 4.88, 4.72, null, null, null, null],
+    tempHistory: [22.8, 23.1, 23.4, null, null, null, null],
+    brixHistory: [19.2, 18.5, 14.7, null, null, null, null],
+    alertas: []
   }
 ];
 
-/* ── Render canecas ── */
-function renderCanecas() {
-  const grid = document.getElementById('canecas-grid');
+/* ═══════════════════════════════════════════════════════════════════
+   ESTADO DE LA APP
+   ═══════════════════════════════════════════════════════════════════ */
+let filtroActivo = 'todos';
 
-  CANECAS.forEach(c => {
-    const pct = Math.round((c.horasActual / c.horasTotal) * 100);
-    const fillClass = c.estado === 'warn' ? 'fill-warn' : c.listo ? 'fill-ok' : 'fill-gold';
-    const phClass = c.listo ? 'caneca-row-val ok-val' : c.estado === 'warn' ? 'caneca-row-val warn-val' : 'caneca-row-val highlight';
-    const tempClass = c.estado === 'warn' ? 'caneca-row-val warn-val' : 'caneca-row-val';
+// Canecas activas en cada gráfico (3 representativas por defecto)
+const estadoCharts = {
+  ph:   new Set(['LPET-C01', 'LPET-C04', 'LPET-C10']),
+  temp: new Set(['LPET-C01', 'LPET-C06', 'LPET-C08']),
+  brix: new Set(['LPET-C01', 'LPET-C04', 'LPET-C10'])
+};
 
-    const card = document.createElement('div');
-    card.className = 'caneca-card';
-    card.innerHTML = `
+// Instancias de Chart.js
+let chartPH, chartTemp, chartBrix;
+// Instancia del mini-chart del modal
+let modalChart = null;
+
+/* ═══════════════════════════════════════════════════════════════════
+   FUNCIONES AUXILIARES
+   ═══════════════════════════════════════════════════════════════════ */
+
+// Determina la etapa de fermentación según horas
+function getEtapa(caneca) {
+  const { horasActual, horasTotal } = caneca;
+  const checkpoints = [0, 24, 48, 72, 96];
+  // Listo para despulpe
+  if (caneca.listo) return { label: 'Listo despulpe', clase: 'etapa-listo' };
+  // Setup: primeras 2 horas
+  if (horasActual <= 2) return { label: 'Setup', clase: 'etapa-setup' };
+  // Checkpoint: ±2h de 24, 48, 72, 96
+  for (const cp of checkpoints) {
+    if (cp > 0 && Math.abs(horasActual - cp) <= 2 && horasActual <= horasTotal) {
+      return { label: `Checkpoint ${cp}h`, clase: 'etapa-checkpoint' };
+    }
+  }
+  return { label: 'Fermentando', clase: 'etapa-fermentando' };
+}
+
+// Clase y texto de la velocidad de pH
+function getVelPHInfo(velPH) {
+  const abs = Math.abs(velPH);
+  let clase, label;
+  if (velPH > 0) {
+    clase = 'vel-crit';
+    label = `+${velPH.toFixed(2)} pH/h`;
+  } else if (abs >= 0.05 && abs <= 0.15) {
+    clase = 'vel-ok';
+    label = `${velPH.toFixed(2)} pH/h`;
+  } else if (abs < 0.03 || (abs > 0.15 && abs <= 0.25)) {
+    clase = 'vel-warn';
+    label = `${velPH.toFixed(2)} pH/h`;
+  } else {
+    clase = 'vel-crit';
+    label = `${velPH.toFixed(2)} pH/h`;
+  }
+  return { clase, label };
+}
+
+// Clase de color para el valor de pH en la card
+function getPhClass(c) {
+  if (c.listo) return 'caneca-row-val ok-val';
+  if (c.estado === 'warn') return 'caneca-row-val warn-val';
+  return 'caneca-row-val highlight';
+}
+
+// Clase para temperatura
+function getTempClass(c) {
+  if (c.estado === 'warn' && c.temp > 25) return 'caneca-row-val warn-val';
+  return 'caneca-row-val';
+}
+
+// Color de la barra de progreso
+function getFillClass(c) {
+  if (c.estado === 'warn') return 'fill-warn';
+  if (c.listo) return 'fill-ok';
+  return 'fill-gold';
+}
+
+// Crea el HTML de una caneca-card
+function buildCanecaCard(c) {
+  const pct       = Math.round((c.horasActual / c.horasTotal) * 100);
+  const fillClass = getFillClass(c);
+  const phClass   = getPhClass(c);
+  const tempClass = getTempClass(c);
+  const etapa     = getEtapa(c);
+  const velInfo   = getVelPHInfo(c.velPH);
+
+  return `
+    <div class="caneca-card" data-id="${c.id}" role="button" tabindex="0" aria-label="Ver detalle de ${c.id}">
       <div class="caneca-header">
-        <div class="caneca-id">${c.id}</div>
+        <div class="caneca-id">${c.id.replace('LPET-', '')}</div>
         <div class="status-dot ${c.estado}"></div>
       </div>
-      <div>
+      <div style="margin-bottom:8px">
         <span class="proceso-badge ${c.badgeClass}">${c.proceso}</span>
+        <span class="etapa-badge ${etapa.clase}">${etapa.label}</span>
       </div>
       <div class="caneca-variedad">${c.variedad}</div>
       <div class="caneca-row">
@@ -806,6 +1396,10 @@ function renderCanecas() {
         <span class="caneca-row-label">Brix</span>
         <span class="caneca-row-val">${c.brix.toFixed(1)} °Bx</span>
       </div>
+      <div class="vel-ph-row">
+        <span class="caneca-row-label">Vel. pH</span>
+        <span class="vel-ph-val ${velInfo.clase}">${velInfo.label}</span>
+      </div>
       <div class="tiempo-bar">
         <div class="tiempo-bar-labels">
           <span>${c.horasActual}h transcurridas</span>
@@ -815,45 +1409,315 @@ function renderCanecas() {
           <div class="tiempo-bar-fill ${fillClass}" style="width:${pct}%"></div>
         </div>
       </div>
-    `;
-    grid.appendChild(card);
+    </div>`;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   RENDER: KPIs dinámicos
+   ═══════════════════════════════════════════════════════════════════ */
+function renderKPIs(canecas) {
+  const grid   = document.getElementById('kpi-grid');
+  const total  = canecas.length;
+  const alertas = canecas.filter(c => c.estado === 'warn' || c.estado === 'crit').length;
+  const listos  = canecas.filter(c => c.listo).length;
+  const procesos = [...new Set(canecas.map(c => c.proceso))];
+  const pct     = Math.round((total / 50) * 100);
+
+  grid.innerHTML = `
+    <div class="kpi-card">
+      <div class="kpi-label">Canecas${filtroActivo !== 'todos' ? ' (' + filtroActivo + ')' : ' activas'}</div>
+      <div class="kpi-value">${total} <span>/ 50</span></div>
+      <div class="kpi-sub">${pct}% de capacidad en uso</div>
+      <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Procesos${filtroActivo !== 'todos' ? ' mostrados' : ' en curso'}</div>
+      <div class="kpi-value">${procesos.length}</div>
+      <div class="kpi-sub">${procesos.join(' · ')}</div>
+    </div>
+    <div class="kpi-card ${alertas > 0 ? 'alert-warn' : 'alert-ok'}">
+      <div class="kpi-label">Alertas activas</div>
+      <div class="kpi-value">${alertas}</div>
+      <div class="kpi-sub" style="color:${alertas > 0 ? 'var(--warn)' : 'var(--ok)'}">
+        ${alertas > 0 ? alertas + ' caneca(s) requieren atención' : 'Todo en rangos normales'}
+      </div>
+    </div>
+    <div class="kpi-card alert-ok">
+      <div class="kpi-label">Listos para despulpe</div>
+      <div class="kpi-value">${listos}</div>
+      <div class="kpi-sub" style="color:var(--ok)">
+        ${listos > 0 ? canecas.filter(c=>c.listo).map(c=>c.id.replace('LPET-','')).join(' · ') + ' listos' : 'Ninguno aún'}
+      </div>
+    </div>`;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   RENDER: Canecas (modo agrupado o lista plana)
+   ═══════════════════════════════════════════════════════════════════ */
+function renderCanecas(canecas) {
+  const container = document.getElementById('canecas-container');
+  const titulo    = document.getElementById('canecas-titulo');
+  container.innerHTML = '';
+
+  titulo.innerHTML = `Canecas activas <small>${canecas.length} unidades${filtroActivo !== 'todos' ? ' · Filtro: ' + filtroActivo : ' monitoreadas'}</small>`;
+
+  if (filtroActivo === 'todos') {
+    // Modo agrupado por proceso
+    const orden = ['LPX-500', 'BIW-200', 'NO-120', 'CSP-48', 'BNX-100'];
+    orden.forEach(proc => {
+      const grupo = canecas.filter(c => c.proceso === proc);
+      if (grupo.length === 0) return;
+
+      const gInfo   = GRUPOS_INFO[proc];
+      const avg     = (grupo.reduce((s,c) => s + (c.horasActual/c.horasTotal)*100, 0) / grupo.length).toFixed(0);
+      const proto   = PROTOCOLOS[proc];
+
+      const div = document.createElement('div');
+      div.className = 'grupo-proceso';
+      div.innerHTML = `
+        <div class="grupo-header">
+          <div class="grupo-header-left">
+            <div class="grupo-stripe" style="background:${gInfo.color}"></div>
+            <div>
+              <div class="grupo-nombre">${gInfo.nombre}</div>
+              <div class="grupo-codigo">${proc}</div>
+            </div>
+          </div>
+          <div class="grupo-stats">
+            <div class="grupo-stat"><strong>${grupo.length}</strong> caneca${grupo.length > 1 ? 's' : ''}</div>
+            <div class="grupo-stat">Avance prom: <strong class="val-ok">${avg}%</strong></div>
+            <div class="grupo-stat">Score SCA: <strong class="val-score">${proto.score}</strong></div>
+            <div class="grupo-stat" style="max-width:200px">${proto.perfil}</div>
+          </div>
+        </div>
+        <div class="grupo-canecas-wrap">
+          <div class="canecas-grid" id="grid-${proc.replace('-','')}"></div>
+        </div>`;
+      container.appendChild(div);
+
+      const grid = div.querySelector('.canecas-grid');
+      grupo.forEach(c => { grid.innerHTML += buildCanecaCard(c); });
+    });
+  } else {
+    // Lista plana cuando hay filtro activo
+    const grid = document.createElement('div');
+    grid.className = 'canecas-grid';
+    canecas.forEach(c => { grid.innerHTML += buildCanecaCard(c); });
+    container.appendChild(grid);
+  }
+
+  // Attaches event listeners en las cards
+  container.querySelectorAll('.caneca-card').forEach(card => {
+    card.addEventListener('click', () => {
+      const id = card.dataset.id;
+      const caneca = CANECAS.find(c => c.id === id);
+      if (caneca) abrirModal(caneca);
+    });
+    card.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        card.click();
+      }
+    });
   });
 }
 
-/* ══════════════════════════════════════════════════════
-   CHART.JS — Datos mock realistas según protocolos
-   ══════════════════════════════════════════════════════ */
+/* ═══════════════════════════════════════════════════════════════════
+   MODAL DE DETALLE
+   ═══════════════════════════════════════════════════════════════════ */
+function abrirModal(c) {
+  const overlay  = document.getElementById('modal');
+  const titulo   = document.getElementById('modal-titulo');
+  const subtitulo = document.getElementById('modal-subtitulo');
+  const badgeEl  = document.getElementById('modal-estado-badge');
+  const body     = document.getElementById('modal-body');
 
-// Eje X: horas 0, 6, 12, 24, 48, 72, 96
-const horas = [0, 6, 12, 24, 48, 72, 96];
+  const proto  = PROTOCOLOS[c.proceso];
+  const etapa  = getEtapa(c);
+  const velInfo = getVelPHInfo(c.velPH);
+  const pct    = Math.round((c.horasActual / c.horasTotal) * 100);
 
-// ── Chart pH ──
-// C01 (LPX-500/Geisha) — anaeróbico, baja lento hasta 3.8
-// C04 (BIW-200/Geisha) — bifásico, baja a 3.8, solo 72h representadas
-// C10 (BNX-100/Tabi)   — semi-anaeróbico, parte de 4.9 → 3.5-3.8
-const phData = {
-  c01_lpx: [5.21, 5.08, 4.92, 4.68, 4.12, 3.93, 3.84],  // LPX-500
-  c04_biw: [5.30, 5.18, 5.05, 4.72, 4.18, 3.86, null],   // BIW-200 (en 96h aún no termina)
-  c10_bnx: [4.90, 4.77, 4.62, 4.38, 4.21, 3.94, 3.71]   // BNX-100
-};
+  // Header del modal
+  titulo.innerHTML   = `${c.id} — <span>${c.proceso}</span>`;
+  subtitulo.textContent = `${c.variedad} · ${c.horasActual}h transcurridas de ${c.horasTotal}h`;
+  badgeEl.textContent  = c.listo ? 'Listo para despulpe' : c.estado === 'ok' ? 'OK — En rango' : 'Atención requerida';
+  badgeEl.className    = 'modal-estado-badge modal-estado-' + (c.listo ? 'ok' : c.estado);
 
-// ── Chart Temperatura ──
-// C01 LPX-500: se mantiene 18-24°C, ciclos noche/día pero estables
-// C06 NO-120: oscilación clara día/noche (proceso de oscilación térmica)
-// C08 CSP-48: constante ~24°C (proceso de temperatura constante)
-const tempData = {
-  c01_lpx: [21.2, 20.8, 21.5, 22.1, 21.4, 20.9, 21.7],  // Estable 20-22°C
-  c06_no:  [25.4, 22.1, 19.8, 26.2, 19.5, 25.1, 18.9],  // Oscilación día/noche
-  c08_csp: [24.0, 23.8, 24.2, 24.1, 24.3, 23.9, 24.1]   // Constante ~24°C
-};
+  // Colores para las métricas
+  const phColor   = c.listo ? '#4ade80' : c.estado === 'warn' ? '#facc15' : '#CB9F5B';
+  const tempColor = (c.temp > 25 || c.temp < 18) ? '#facc15' : '#FCF7EC';
+  const velColor  = velInfo.clase === 'vel-ok' ? '#4ade80' : velInfo.clase === 'vel-warn' ? '#facc15' : '#ef4444';
 
-// ── Chart Brix ──
-// Todos bajan progresivamente (consumo de azúcares por fermentación)
-const brixData = {
-  c01_lpx: [18.5, 17.8, 16.9, 15.2, 10.4, 7.1, 3.9],
-  c04_biw: [19.2, 18.6, 17.7, 15.8, 8.7,  5.4, null],
-  c10_bnx: [18.8, 17.9, 17.0, 15.4, 9.8,  6.3, 4.1]
-};
+  // Checkpoints del timeline
+  const checkpoints = [0, 24, 48, 72, 96];
+  const timelineHTML = checkpoints.map(cp => {
+    let clase = '';
+    const isCurrent = Math.abs(c.horasActual - cp) <= 3 && c.horasActual >= cp;
+    const isPassed  = c.horasActual > cp + 3;
+    if (isCurrent) clase = 'current';
+    else if (isPassed) clase = 'passed';
+    return `
+      <div class="timeline-step ${clase}">
+        <div class="timeline-dot"></div>
+        <div class="timeline-hora">${cp}h</div>
+        <div class="timeline-label">${cp === 0 ? 'Inicio' : cp === c.horasTotal ? 'Fin' : 'CP'}</div>
+      </div>`;
+  }).join('');
+
+  // Alertas de la caneca
+  const alertasHTML = c.alertas.length === 0
+    ? '<div class="modal-alerta-vacio">Sin alertas activas para esta caneca.</div>'
+    : c.alertas.map(a => {
+        const isWarn = a.startsWith('⚠');
+        const color  = isWarn ? '#facc15' : '#4ade80';
+        return `<div class="modal-alerta-item"><span style="color:${color};font-size:0.9rem">${isWarn ? '⚠' : '✓'}</span> <span>${a.replace('⚠ ','')}</span></div>`;
+      }).join('');
+
+  // Construir body del modal
+  body.innerHTML = `
+    <!-- Métricas principales -->
+    <div class="modal-section">
+      <div class="modal-section-title">Métricas actuales</div>
+      <div class="modal-metricas-grid">
+        <div class="modal-metrica">
+          <div class="modal-metrica-label">pH actual</div>
+          <div class="modal-metrica-val" style="color:${phColor}">${c.ph.toFixed(2)}<span class="modal-metrica-unit"> / obj ${c.phObj}</span></div>
+        </div>
+        <div class="modal-metrica">
+          <div class="modal-metrica-label">Temperatura</div>
+          <div class="modal-metrica-val" style="color:${tempColor}">${c.temp.toFixed(1)}<span class="modal-metrica-unit">°C</span></div>
+        </div>
+        <div class="modal-metrica">
+          <div class="modal-metrica-label">Brix</div>
+          <div class="modal-metrica-val" style="color:#FCF7EC">${c.brix.toFixed(1)}<span class="modal-metrica-unit">°Bx</span></div>
+        </div>
+        <div class="modal-metrica">
+          <div class="modal-metrica-label">Vel. pH</div>
+          <div class="modal-metrica-val" style="color:${velColor}">${velInfo.label}</div>
+        </div>
+        <div class="modal-metrica">
+          <div class="modal-metrica-label">Horas / Total</div>
+          <div class="modal-metrica-val" style="color:#FCF7EC">${c.horasActual}<span class="modal-metrica-unit">h / ${c.horasTotal}h (${pct}%)</span></div>
+        </div>
+        <div class="modal-metrica">
+          <div class="modal-metrica-label">Etapa</div>
+          <div class="modal-metrica-val" style="font-size:0.9rem;color:#CB9F5B">${etapa.label}</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Timeline -->
+    <div class="modal-section">
+      <div class="modal-section-title">Timeline de checkpoints</div>
+      <div class="timeline-checkpoints">${timelineHTML}</div>
+    </div>
+
+    <!-- Mini gráfico pH -->
+    <div class="modal-section">
+      <div class="modal-section-title">Curva de pH — ${c.id}</div>
+      <div class="modal-chart-wrap">
+        <canvas id="modal-chart-canvas"></canvas>
+      </div>
+    </div>
+
+    <!-- Rangos del protocolo -->
+    <div class="modal-section">
+      <div class="modal-section-title">Protocolo ${c.proceso} — Rangos de referencia</div>
+      <div class="modal-rangos-grid">
+        <div class="modal-rango"><div class="modal-rango-label">pH inicio</div><div class="modal-rango-val">${proto.phInicio}</div></div>
+        <div class="modal-rango"><div class="modal-rango-label">pH objetivo</div><div class="modal-rango-val">${proto.phObjetivo}</div></div>
+        <div class="modal-rango"><div class="modal-rango-label">Temperatura</div><div class="modal-rango-val">${proto.tempRango}</div></div>
+        <div class="modal-rango"><div class="modal-rango-label">Brix inicio</div><div class="modal-rango-val">${proto.brixInicio} °Bx</div></div>
+        <div class="modal-rango"><div class="modal-rango-label">Brix objetivo</div><div class="modal-rango-val">${proto.brixObjetivo} °Bx</div></div>
+        <div class="modal-rango"><div class="modal-rango-label">Duración</div><div class="modal-rango-val">${proto.duracion}</div></div>
+        <div class="modal-rango"><div class="modal-rango-label">Score SCA</div><div class="modal-rango-val" style="color:var(--ok)">${proto.score}</div></div>
+        <div class="modal-rango"><div class="modal-rango-label">Perfil de taza</div><div class="modal-rango-val">${proto.perfil}</div></div>
+      </div>
+    </div>
+
+    <!-- Alertas -->
+    <div class="modal-section">
+      <div class="modal-section-title">Alertas de esta caneca</div>
+      <div class="modal-alertas">${alertasHTML}</div>
+    </div>`;
+
+  // Crear el mini Chart.js de pH
+  if (modalChart) { modalChart.destroy(); modalChart = null; }
+  const canvas = document.getElementById('modal-chart-canvas');
+  const color  = proto.color || '#CB9F5B';
+  modalChart = new Chart(canvas, {
+    type: 'line',
+    data: {
+      labels: HORAS.map(h => h + 'h'),
+      datasets: [{
+        label: c.id + ' — pH',
+        data: c.phHistory,
+        borderColor: color,
+        backgroundColor: color + '22',
+        borderWidth: 2,
+        pointRadius: 4,
+        pointBackgroundColor: color,
+        pointBorderColor: '#3a3b3c',
+        pointBorderWidth: 1,
+        tension: 0.4,
+        spanGaps: false
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: '#3a3b3c',
+          borderColor: 'rgba(203,159,91,0.3)',
+          borderWidth: 1,
+          titleColor: '#CB9F5B',
+          bodyColor: '#FCF7EC',
+          titleFont: { family: 'Jost', size: 11 },
+          bodyFont:  { family: 'Jost', size: 11 },
+          padding: 8
+        }
+      },
+      scales: {
+        x: {
+          grid:  { color: 'rgba(255,255,255,0.05)' },
+          ticks: { color: '#9e9e9e', font: { family: 'Jost', size: 10 } }
+        },
+        y: {
+          grid:  { color: 'rgba(255,255,255,0.05)' },
+          ticks: { color: '#9e9e9e', font: { family: 'Jost', size: 10 } },
+          min: 3.4, max: 5.6,
+          title: { display: true, text: 'pH', color: '#9e9e9e', font: { family: 'Jost', size: 10 } }
+        }
+      }
+    }
+  });
+
+  // Mostrar modal
+  overlay.classList.add('visible');
+  document.body.style.overflow = 'hidden';
+}
+
+function cerrarModal() {
+  const overlay = document.getElementById('modal');
+  overlay.classList.remove('visible');
+  document.body.style.overflow = '';
+  if (modalChart) { modalChart.destroy(); modalChart = null; }
+}
+
+// Event listeners del modal
+document.getElementById('modal-close').addEventListener('click', cerrarModal);
+document.getElementById('modal').addEventListener('click', e => {
+  if (e.target === document.getElementById('modal')) cerrarModal();
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') cerrarModal();
+});
+
+/* ═══════════════════════════════════════════════════════════════════
+   CHART.JS — Gráficos principales con selector de canecas
+   ═══════════════════════════════════════════════════════════════════ */
 
 const chartDefaults = {
   responsive: true,
@@ -870,28 +1734,23 @@ const chartDefaults = {
     },
     tooltip: {
       backgroundColor: '#3a3b3c',
-      borderColor: 'rgba(201,162,39,0.3)',
+      borderColor: 'rgba(203,159,91,0.3)',
       borderWidth: 1,
-      titleColor: '#C9A227',
-      bodyColor: '#F5F1EB',
+      titleColor: '#CB9F5B',
+      bodyColor: '#FCF7EC',
       titleFont: { family: 'Jost', size: 11 },
-      bodyFont: { family: 'Jost', size: 11 },
+      bodyFont:  { family: 'Jost', size: 11 },
       padding: 10
     }
   },
   scales: {
     x: {
-      grid: { color: 'rgba(255,255,255,0.05)' },
+      grid:  { color: 'rgba(255,255,255,0.05)' },
       ticks: { color: '#9e9e9e', font: { family: 'Jost', size: 10 } },
-      title: {
-        display: true,
-        text: 'Horas de fermentación',
-        color: '#9e9e9e',
-        font: { family: 'Jost', size: 10 }
-      }
+      title: { display: true, text: 'Horas de fermentación', color: '#9e9e9e', font: { family: 'Jost', size: 10 } }
     },
     y: {
-      grid: { color: 'rgba(255,255,255,0.05)' },
+      grid:  { color: 'rgba(255,255,255,0.05)' },
       ticks: { color: '#9e9e9e', font: { family: 'Jost', size: 10 } }
     }
   }
@@ -913,84 +1772,133 @@ function lineDataset(label, data, color) {
   };
 }
 
-/* Chart pH */
-new Chart(document.getElementById('chartPH'), {
-  type: 'line',
-  data: {
-    labels: horas.map(h => h + 'h'),
-    datasets: [
-      lineDataset('C01 – LPX-500 / Geisha',        phData.c01_lpx, '#E8838C'),
-      lineDataset('C04 – BIW-200 / Geisha',         phData.c04_biw, '#C9A227'),
-      lineDataset('C10 – BNX-100 / Tabi',           phData.c10_bnx, '#4ade80')
-    ]
-  },
-  options: {
-    ...chartDefaults,
-    scales: {
-      ...chartDefaults.scales,
-      y: {
-        ...chartDefaults.scales.y,
-        min: 3.4,
-        max: 5.5,
-        title: { display: true, text: 'pH', color: '#9e9e9e', font: { family: 'Jost', size: 10 } }
+// Crea los datasets de un gráfico según el Set activo y el tipo de datos
+function buildDatasets(tipo, activeSet) {
+  return [...activeSet].map((id, idx) => {
+    const c     = CANECAS.find(x => x.id === id);
+    if (!c) return null;
+    const color = CANECA_COLORS[CANECAS.indexOf(c) % CANECA_COLORS.length];
+    const label = `${c.id.replace('LPET-','')} – ${c.proceso}/${c.variedad}`;
+    const data  = tipo === 'ph' ? c.phHistory : tipo === 'temp' ? c.tempHistory : c.brixHistory;
+    return lineDataset(label, data, color);
+  }).filter(Boolean);
+}
+
+// Inicializa los 3 gráficos principales
+function initCharts() {
+  const yPH   = { ...chartDefaults.scales.y, min: 3.4, max: 5.6, title: { display: true, text: 'pH',   color: '#9e9e9e', font: { family: 'Jost', size: 10 } } };
+  const yTemp = { ...chartDefaults.scales.y, min: 17,  max: 29,  title: { display: true, text: '°C',   color: '#9e9e9e', font: { family: 'Jost', size: 10 } } };
+  const yBrix = { ...chartDefaults.scales.y, min: 0,   max: 22,  title: { display: true, text: '°Bx',  color: '#9e9e9e', font: { family: 'Jost', size: 10 } } };
+
+  chartPH = new Chart(document.getElementById('chartPH'), {
+    type: 'line',
+    data: { labels: HORAS.map(h => h + 'h'), datasets: buildDatasets('ph', estadoCharts.ph) },
+    options: { ...chartDefaults, scales: { ...chartDefaults.scales, y: yPH } }
+  });
+  chartTemp = new Chart(document.getElementById('chartTemp'), {
+    type: 'line',
+    data: { labels: HORAS.map(h => h + 'h'), datasets: buildDatasets('temp', estadoCharts.temp) },
+    options: { ...chartDefaults, scales: { ...chartDefaults.scales, y: yTemp } }
+  });
+  chartBrix = new Chart(document.getElementById('chartBrix'), {
+    type: 'line',
+    data: { labels: HORAS.map(h => h + 'h'), datasets: buildDatasets('brix', estadoCharts.brix) },
+    options: { ...chartDefaults, scales: { ...chartDefaults.scales, y: yBrix } }
+  });
+}
+
+// Actualiza un gráfico al cambiar el selector
+function updateChart(tipo) {
+  const chart = tipo === 'ph' ? chartPH : tipo === 'temp' ? chartTemp : chartBrix;
+  if (!chart) return;
+  chart.data.datasets = buildDatasets(tipo, estadoCharts[tipo]);
+  chart.update();
+}
+
+// Construye los toggles de selector de canecas para un gráfico
+function buildSelectorToggles(tipo) {
+  const containerId = `selector-${tipo}`;
+  const container   = document.getElementById(containerId);
+  const maxWarnEl   = document.getElementById(`max-warn-${tipo}`);
+  const activeSet   = estadoCharts[tipo];
+
+  // Eliminar toggles previos (mantener label y max-warn)
+  container.querySelectorAll('.caneca-toggle').forEach(el => el.remove());
+
+  CANECAS.forEach((c, idx) => {
+    const color  = CANECA_COLORS[idx % CANECA_COLORS.length];
+    const isActive = activeSet.has(c.id);
+    const btn    = document.createElement('button');
+    btn.className = 'caneca-toggle' + (isActive ? ' active' : '');
+    btn.style.background = isActive ? color + '22' : '';
+    btn.style.borderColor = isActive ? color : '';
+    btn.style.color = isActive ? color : '';
+    btn.dataset.id   = c.id;
+    btn.dataset.tipo = tipo;
+    btn.innerHTML = `<span class="toggle-dot" style="background:${color}"></span>${c.id.replace('LPET-','')}`;
+
+    btn.addEventListener('click', () => {
+      const curSet = estadoCharts[tipo];
+      if (curSet.has(c.id)) {
+        curSet.delete(c.id);
+      } else {
+        if (curSet.size >= 5) {
+          maxWarnEl.style.display = 'inline';
+          setTimeout(() => { maxWarnEl.style.display = 'none'; }, 2500);
+          return;
+        }
+        curSet.add(c.id);
       }
-    }
-  }
-});
+      // Re-render toggles y actualizar chart
+      buildSelectorToggles(tipo);
+      updateChart(tipo);
+    });
 
-/* Chart Temperatura */
-new Chart(document.getElementById('chartTemp'), {
-  type: 'line',
-  data: {
-    labels: horas.map(h => h + 'h'),
-    datasets: [
-      lineDataset('C01 – LPX-500 / Geisha',         tempData.c01_lpx, '#E8838C'),
-      lineDataset('C06 – NO-120 / Tabi (oscilante)', tempData.c06_no,  '#C9A227'),
-      lineDataset('C08 – CSP-48 / Geisha (constante)',tempData.c08_csp,'#93c5fd')
-    ]
-  },
-  options: {
-    ...chartDefaults,
-    scales: {
-      ...chartDefaults.scales,
-      y: {
-        ...chartDefaults.scales.y,
-        min: 17,
-        max: 28,
-        title: { display: true, text: '°C', color: '#9e9e9e', font: { family: 'Jost', size: 10 } }
-      }
-    }
-  }
-});
+    // Insertar antes del max-warn
+    container.insertBefore(btn, maxWarnEl);
+  });
+}
 
-/* Chart Brix */
-new Chart(document.getElementById('chartBrix'), {
-  type: 'line',
-  data: {
-    labels: horas.map(h => h + 'h'),
-    datasets: [
-      lineDataset('C01 – LPX-500 / Geisha', brixData.c01_lpx, '#E8838C'),
-      lineDataset('C04 – BIW-200 / Geisha', brixData.c04_biw, '#C9A227'),
-      lineDataset('C10 – BNX-100 / Tabi',   brixData.c10_bnx, '#4ade80')
-    ]
-  },
-  options: {
-    ...chartDefaults,
-    scales: {
-      ...chartDefaults.scales,
-      y: {
-        ...chartDefaults.scales.y,
-        min: 0,
-        max: 22,
-        title: { display: true, text: '°Bx', color: '#9e9e9e', font: { family: 'Jost', size: 10 } }
-      }
-    }
-  }
-});
+/* ═══════════════════════════════════════════════════════════════════
+   FILTROS POR PROCESO
+   ═══════════════════════════════════════════════════════════════════ */
+function aplicarFiltro(proceso) {
+  filtroActivo = proceso;
 
-/* Inicializar */
-renderCanecas();
+  // Actualizar botones
+  document.querySelectorAll('.filtro-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.proceso === proceso);
+  });
 
+  const canecasFiltradas = proceso === 'todos'
+    ? CANECAS
+    : CANECAS.filter(c => c.proceso === proceso);
+
+  renderKPIs(canecasFiltradas);
+  renderCanecas(canecasFiltradas);
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   INICIALIZACIÓN
+   ═══════════════════════════════════════════════════════════════════ */
+(function init() {
+  // KPIs y canecas iniciales
+  renderKPIs(CANECAS);
+  renderCanecas(CANECAS);
+
+  // Gráficos
+  initCharts();
+
+  // Selectores de canecas en gráficos
+  buildSelectorToggles('ph');
+  buildSelectorToggles('temp');
+  buildSelectorToggles('brix');
+
+  // Event listeners para filtros
+  document.querySelectorAll('.filtro-btn').forEach(btn => {
+    btn.addEventListener('click', () => aplicarFiltro(btn.dataset.proceso));
+  });
+})();
 </script>
 </body>
 </html>
