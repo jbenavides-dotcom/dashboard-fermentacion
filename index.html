@@ -8,6 +8,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.0.1/dist/chartjs-plugin-annotation.min.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -1056,6 +1057,139 @@
       .canecas-grid { grid-template-columns: 1fr; }
       .modal-metricas-grid { grid-template-columns: 1fr 1fr; }
     }
+
+    /* ─────────────────────────────────────────────
+       LIVE SENSOR CURVES — Tank LIVE Tuya
+       ───────────────────────────────────────────── */
+    .live-curves {
+      background: var(--navy);
+      border-radius: 16px;
+      padding: 28px;
+      margin: 28px 0 20px;
+      box-shadow: 0 12px 32px -8px rgb(14 30 54 / 0.35), 0 2px 4px rgb(0 0 0 / 0.04);
+    }
+    .live-curves-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 22px;
+      padding-bottom: 0;
+      border: none;
+    }
+    .live-curves-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: #fff;
+      font-family: var(--font-sans);
+      font-weight: 600;
+      font-size: 1.1rem;
+      letter-spacing: 0.2px;
+    }
+    .live-curves-title svg {
+      width: 22px; height: 22px;
+      stroke: var(--brand-pink);
+      stroke-width: 2;
+      fill: none;
+    }
+    .live-curves-meta {
+      color: rgb(255 255 255 / 0.55);
+      font-size: 0.78rem;
+      letter-spacing: 0.4px;
+    }
+    .lc-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+    .lc-card {
+      background: #efe7d4;
+      border-radius: 12px;
+      padding: 18px 20px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      min-height: 280px;
+      position: relative;
+    }
+    .lc-card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+    }
+    .lc-label {
+      font-family: var(--font-sans);
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      font-weight: 700;
+      font-size: 0.7rem;
+    }
+    .lc-sub {
+      font-size: 0.78rem;
+      color: var(--gray-medium);
+      margin-top: 1px;
+    }
+    .lc-value {
+      font-family: var(--font-sans);
+      font-weight: 700;
+      font-size: 2.2rem;
+      line-height: 1;
+      text-align: right;
+    }
+    .lc-value sup {
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--gray-medium);
+      margin-left: 3px;
+      vertical-align: top;
+      letter-spacing: 0;
+    }
+    .lc-card.lc-ph    .lc-label,  .lc-card.lc-ph    .lc-value { color: var(--brand-red); }
+    .lc-card.lc-temp  .lc-label,  .lc-card.lc-temp  .lc-value { color: #d97706; }
+    .lc-card.lc-brix  .lc-label,  .lc-card.lc-brix  .lc-value { color: #2563eb; }
+
+    .lc-badge {
+      display: inline-block;
+      align-self: flex-end;
+      padding: 4px 10px;
+      border-radius: 9999px;
+      font-size: 0.66rem;
+      font-weight: 700;
+      letter-spacing: 0.6px;
+      text-transform: lowercase;
+      white-space: nowrap;
+    }
+    .lc-badge.in    { background: #d1fae5; color: #15803d; }
+    .lc-badge.out   { background: #fee2e2; color: #b91c1c; }
+    .lc-badge.idle  { background: #e5e7eb; color: #4b5563; }
+
+    .lc-canvas-wrap {
+      flex: 1;
+      position: relative;
+      min-height: 140px;
+      margin-top: 4px;
+    }
+    .lc-foot {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.73rem;
+      padding-top: 8px;
+      border-top: 1px solid rgb(0 0 0 / 0.06);
+    }
+    .lc-foot-trend { color: var(--dark-text); font-weight: 500; }
+    .lc-foot-note  { color: var(--gray-medium); font-style: italic; }
+    .lc-card.lc-ph   .lc-foot-note { color: var(--brand-red); }
+    .lc-card.lc-temp .lc-foot-note { color: #d97706; }
+    .lc-card.lc-brix .lc-foot-note { color: #2563eb; }
+
+    @media (max-width: 1100px) {
+      .lc-grid { grid-template-columns: 1fr; }
+    }
   </style>
 </head>
 <body>
@@ -1105,6 +1239,75 @@
 </header>
 
 <div class="page">
+
+  <!-- ╔══════════════════════════════════════════════╗ -->
+  <!-- ║      LIVE SENSOR CURVES (Tuya monitor)     ║ -->
+  <!-- ╚══════════════════════════════════════════════╝ -->
+  <section class="live-curves" id="live-curves" hidden>
+    <div class="live-curves-head">
+      <div class="live-curves-title">
+        <svg viewBox="0 0 24 24"><polyline points="3 12 7 12 9 6 14 18 16 12 21 12"/></svg>
+        Live sensor curves · <span id="lc-tank-name">Café Prueba</span>
+      </div>
+      <div class="live-curves-meta" id="lc-meta">1-hour IoT interval · <span id="lc-elapsed">0 h elapsed</span></div>
+    </div>
+    <div class="lc-grid">
+      <!-- pH -->
+      <div class="lc-card lc-ph">
+        <div class="lc-card-top">
+          <div>
+            <div class="lc-label">pH</div>
+            <div class="lc-sub">Acidification</div>
+          </div>
+          <div>
+            <div class="lc-value" id="lc-ph-value">—</div>
+            <div class="lc-badge idle" id="lc-ph-badge">awaiting · 4.0–4.8</div>
+          </div>
+        </div>
+        <div class="lc-canvas-wrap"><canvas id="lc-chart-ph"></canvas></div>
+        <div class="lc-foot">
+          <span class="lc-foot-trend" id="lc-ph-trend">↘ — last 24 h</span>
+          <span class="lc-foot-note">Target band shaded</span>
+        </div>
+      </div>
+      <!-- TEMP -->
+      <div class="lc-card lc-temp">
+        <div class="lc-card-top">
+          <div>
+            <div class="lc-label">Temperature</div>
+            <div class="lc-sub">Thermal oscillation</div>
+          </div>
+          <div>
+            <div class="lc-value"><span id="lc-temp-value">—</span><sup>°C</sup></div>
+            <div class="lc-badge idle" id="lc-temp-badge">awaiting · 18–24</div>
+          </div>
+        </div>
+        <div class="lc-canvas-wrap"><canvas id="lc-chart-temp"></canvas></div>
+        <div class="lc-foot">
+          <span class="lc-foot-trend" id="lc-temp-trend">→ awaiting reading</span>
+          <span class="lc-foot-note">Target band shaded</span>
+        </div>
+      </div>
+      <!-- BRIX -->
+      <div class="lc-card lc-brix">
+        <div class="lc-card-top">
+          <div>
+            <div class="lc-label">Brix</div>
+            <div class="lc-sub">Sugar consumption</div>
+          </div>
+          <div>
+            <div class="lc-value"><span id="lc-brix-value">—</span><sup>°Bx</sup></div>
+            <div class="lc-badge idle" id="lc-brix-badge">manual · 14–18</div>
+          </div>
+        </div>
+        <div class="lc-canvas-wrap"><canvas id="lc-chart-brix"></canvas></div>
+        <div class="lc-foot">
+          <span class="lc-foot-trend" id="lc-brix-trend">↘ — last 24 h</span>
+          <span class="lc-foot-note">Target band shaded</span>
+        </div>
+      </div>
+    </div>
+  </section>
 
   <!-- ╔══════════════════════════════════════════════╗ -->
   <!-- ║                   KPIs                      ║ -->
@@ -2270,7 +2473,19 @@ function aplicarFiltro(proceso) {
   const TUYA_WEBHOOK = 'https://jhona.app.n8n.cloud/webhook/tuya-fermentacion';
   const TUYA_POLL_MS = 3600000; // 1 hora — fermentación es proceso lento, no necesita más
   const LIVE_CANECA_ID = 'LPET-CAFE-PRUEBA';
-  const LIVE_HISTORY_MAX = 7; // mismo tamaño que phHistory mock
+  const LIVE_HISTORY_MAX = 96; // 1 punto/hora durante 96h de proceso
+
+  // ── Bandas objetivo (rangos protocolo LPX-500 — Katherine) ──
+  const LC_BANDS = {
+    ph:   { min: 4.0,  max: 4.8,  yMin: 3.6,  yMax: 5.8,  color: '#c1004a' },
+    temp: { min: 18,   max: 24,   yMin: 14,   yMax: 28,   color: '#d97706' },
+    brix: { min: 4,    max: 18,   yMin: 0,    yMax: 24,   color: '#2563eb' }
+  };
+
+  // ── Charts del módulo Live Curves (separados de los charts principales) ──
+  let lcCharts = { ph: null, temp: null, brix: null };
+  let lcLiveBuffer = { ph: [], temp: [], brix: [], hours: [] };
+  let lcStartTime = null;
 
   let liveStartTime = null;
 
@@ -2296,6 +2511,164 @@ function aplicarFiltro(proceso) {
     if (min < 60) return `hace ${min} min`;
     const h = Math.floor(min / 60);
     return `hace ${h} h`;
+  }
+
+  // ── Crear un chart Live Curves (line + banda objetivo via annotation) ──
+  function buildLcChart(canvasId, color, band) {
+    const ctx = document.getElementById(canvasId);
+    if (!ctx) return null;
+    const ds = {
+      data: [],
+      borderColor: color,
+      borderWidth: 2.4,
+      tension: 0.4,
+      pointRadius: (c) => c.dataIndex === c.dataset.data.length - 1 ? 4 : 0,
+      pointBackgroundColor: color,
+      pointBorderColor: '#fff',
+      pointBorderWidth: 1,
+      fill: false,
+      spanGaps: true
+    };
+    return new Chart(ctx, {
+      type: 'line',
+      data: { labels: [], datasets: [ds] },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        animation: { duration: 600 },
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            backgroundColor: 'rgba(14,30,54,0.92)',
+            titleFont: { size: 11 },
+            bodyFont: { size: 12, weight: 600 }
+          },
+          annotation: {
+            annotations: {
+              targetBand: {
+                type: 'box',
+                yMin: band.min,
+                yMax: band.max,
+                backgroundColor: color + '1f', // 12% alpha
+                borderColor: color + '40',
+                borderWidth: 1,
+                borderDash: [4, 4]
+              }
+            }
+          }
+        },
+        scales: {
+          x: {
+            grid: { display: false },
+            ticks: { color: '#6b6b6b', font: { size: 10 } }
+          },
+          y: {
+            min: band.yMin,
+            max: band.yMax,
+            grid: { color: 'rgba(0,0,0,0.05)' },
+            ticks: { color: '#6b6b6b', font: { size: 10 } }
+          }
+        }
+      }
+    });
+  }
+
+  function initLiveCurvesCharts() {
+    if (typeof Chart === 'undefined') return;
+    if (typeof Chart.register === 'function' && window['chartjs-plugin-annotation']) {
+      try { Chart.register(window['chartjs-plugin-annotation']); } catch(e) {}
+    }
+    lcCharts.ph   = buildLcChart('lc-chart-ph',   LC_BANDS.ph.color,   LC_BANDS.ph);
+    lcCharts.temp = buildLcChart('lc-chart-temp', LC_BANDS.temp.color, LC_BANDS.temp);
+    lcCharts.brix = buildLcChart('lc-chart-brix', LC_BANDS.brix.color, LC_BANDS.brix);
+  }
+
+  function lcBadge(value, band, idleText) {
+    if (value == null || isNaN(value)) return { cls: 'idle', text: idleText };
+    if (value >= band.min && value <= band.max) return { cls: 'in',  text: `in band · ${band.min}–${band.max}` };
+    return { cls: 'out', text: `out of band · ${band.min}–${band.max}` };
+  }
+
+  function lcTrend(values) {
+    const valid = values.filter(v => v != null);
+    if (valid.length < 2) return { arrow: '→', delta: '—' };
+    const last = valid[valid.length - 1];
+    const ref  = valid[Math.max(0, valid.length - 24)]; // ~24 puntos = 24h
+    const d = last - ref;
+    const arrow = d > 0.05 ? '↗' : d < -0.05 ? '↘' : '→';
+    return { arrow, delta: (d >= 0 ? '+' : '') + d.toFixed(2) };
+  }
+
+  function updateLiveCurves(readings) {
+    const live = document.getElementById('live-curves');
+    if (!live) return;
+    if (live.hidden) live.hidden = false;
+
+    const now = Date.now();
+    if (!lcStartTime) lcStartTime = now;
+    const hoursElapsed = Math.max(0, (now - lcStartTime) / 3600000);
+
+    // Acumular en buffer (max LIVE_HISTORY_MAX)
+    if (readings.ph != null)     lcLiveBuffer.ph.push(readings.ph);
+    if (readings.temp_c != null) lcLiveBuffer.temp.push(readings.temp_c);
+    // Brix: si hay override en localStorage (registrado manualmente) lo usamos
+    const brixOverride = (typeof lastBrixOverride === 'function')
+      ? lastBrixOverride(LIVE_CANECA_ID)
+      : null;
+    if (brixOverride != null) lcLiveBuffer.brix.push(brixOverride);
+
+    lcLiveBuffer.hours.push(+hoursElapsed.toFixed(1));
+    if (lcLiveBuffer.ph.length    > LIVE_HISTORY_MAX) lcLiveBuffer.ph.shift();
+    if (lcLiveBuffer.temp.length  > LIVE_HISTORY_MAX) lcLiveBuffer.temp.shift();
+    if (lcLiveBuffer.brix.length  > LIVE_HISTORY_MAX) lcLiveBuffer.brix.shift();
+    if (lcLiveBuffer.hours.length > LIVE_HISTORY_MAX) lcLiveBuffer.hours.shift();
+
+    // Etiquetas: mostrar sólo D1-D5 cada cierto interval (cada ~24h en hours)
+    const labels = lcLiveBuffer.hours.map(h => h < 24 ? '' : 'D' + Math.floor(h / 24));
+
+    // ── Update charts ──
+    function refreshChart(chart, dataArr) {
+      if (!chart) return;
+      chart.data.labels = labels;
+      chart.data.datasets[0].data = dataArr;
+      chart.update();
+    }
+    refreshChart(lcCharts.ph,   lcLiveBuffer.ph);
+    refreshChart(lcCharts.temp, lcLiveBuffer.temp);
+    refreshChart(lcCharts.brix, lcLiveBuffer.brix);
+
+    // ── Update headers (valor + badge + trend) ──
+    function setText(id, val) { const el = document.getElementById(id); if (el) el.textContent = val; }
+    function setBadge(id, b) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.className = 'lc-badge ' + b.cls;
+      el.textContent = b.text;
+    }
+
+    const phLast   = readings.ph != null   ? readings.ph   : null;
+    const tempLast = readings.temp_c != null ? readings.temp_c : null;
+    const brixLast = brixOverride;
+
+    setText('lc-ph-value',   phLast   != null ? phLast.toFixed(2) : '—');
+    setText('lc-temp-value', tempLast != null ? tempLast.toFixed(1) : '—');
+    setText('lc-brix-value', brixLast != null ? brixLast.toFixed(1) : '—');
+
+    setBadge('lc-ph-badge',   lcBadge(phLast,   LC_BANDS.ph,   'awaiting · 4.0–4.8'));
+    setBadge('lc-temp-badge', lcBadge(tempLast, LC_BANDS.temp, 'awaiting · 18–24'));
+    setBadge('lc-brix-badge', lcBadge(brixLast, LC_BANDS.brix, 'manual · 4–18'));
+
+    const phT = lcTrend(lcLiveBuffer.ph);
+    const tT  = lcTrend(lcLiveBuffer.temp);
+    const bT  = lcTrend(lcLiveBuffer.brix);
+    setText('lc-ph-trend',   `${phT.arrow} ${phT.delta} in last 24 h`);
+    setText('lc-temp-trend', `${tT.arrow} daily cycle · last ${tempLast != null ? tempLast.toFixed(1)+'°C' : '—'}`);
+    setText('lc-brix-trend', `${bT.arrow} ${bT.delta} in last 24 h`);
+
+    // ── Update meta ──
+    setText('lc-elapsed', hoursElapsed < 1
+      ? Math.round(hoursElapsed * 60) + ' min elapsed'
+      : hoursElapsed.toFixed(0) + ' h elapsed');
   }
 
   async function fetchTuyaLive() {
@@ -2358,12 +2731,15 @@ function aplicarFiltro(proceso) {
       renderKPIs(canecasFiltradas);
       renderCanecas(canecasFiltradas);
 
-      // Refrescar charts si están inicializados
+      // Refrescar charts globales si están inicializados
       try {
         if (typeof chartPH   !== 'undefined' && chartPH)   updateChart('ph');
         if (typeof chartTemp !== 'undefined' && chartTemp) updateChart('temp');
         if (typeof chartBrix !== 'undefined' && chartBrix) updateChart('brix');
       } catch(e){ /* charts not ready yet */ }
+
+      // Update Live Curves panel (panel nuevo Tank LIVE)
+      try { updateLiveCurves(r); } catch(e) { console.warn('[LC] update failed', e); }
 
     } catch (err) {
       console.warn('[TUYA LIVE] fetch failed:', err.message);
@@ -2371,6 +2747,9 @@ function aplicarFiltro(proceso) {
       if (meta) meta.innerHTML = `Última actualización: <strong style="color:var(--warn)">error sensor</strong>`;
     }
   }
+
+  // Inicializar charts del panel Live Curves (separado de los charts principales)
+  try { initLiveCurvesCharts(); } catch(e) { console.warn('[LC] init failed', e); }
 
   // Primera carga + polling
   fetchTuyaLive();
