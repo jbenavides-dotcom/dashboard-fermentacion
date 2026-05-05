@@ -18,27 +18,35 @@
       --navy:         #0e1e36;
       --dark-text:    #1a1a1a;
       --gray-light:   #ececec;
-      --gray-medium:  #b3b3b3;
+      --gray-medium:  #6b6b6b;   /* texto muted oscuro y legible (no fantasma) */
+      --gray-soft:    #f5f5f5;   /* fondo body */
       --tan:          #b78a48;
       --white:        #ffffff;
+
+      /* Tintes suaves derivados (sin grises planos) */
+      --pink-soft:    rgb(251 194 196 / 0.18);   /* fondo pink muy diluido */
+      --pink-soft-2:  rgb(251 194 196 / 0.32);   /* fondo pink medio */
+      --tan-soft:     rgb(183 138 72 / 0.10);    /* fondo cálido tan */
+      --navy-soft:    rgb(14 30 54 / 0.04);      /* tinte navy casi blanco */
 
       /* Aliases compatibles con el código existente
          (no tocamos los nombres de variables — solo sus valores) */
       --dark:   var(--white);          /* superficie principal */
       --dark2:  var(--white);          /* card surface */
-      --dark3:  #f7f7f5;               /* card surface secundaria */
+      --dark3:  var(--pink-soft);      /* card surface secundaria (pink diluido, no gris) */
       --gold:   var(--brand-red);      /* accent fuerte */
       --pink:   var(--brand-red);      /* títulos de sección */
-      --light:  var(--dark-text);      /* texto principal */
+      --light:  var(--dark-text);      /* texto principal — NEGRO LEGIBLE */
 
-      /* Estados (semánticos, ajustados para fondo claro) */
-      --ok:     #16a34a;
-      --warn:   #d97706;
-      --crit:   #dc2626;
+      /* Estados (semánticos, ajustados para fondo claro y contraste alto) */
+      --ok:     #15803d;
+      --warn:   #b45309;
+      --crit:   #b91c1c;
 
       /* Neutros */
       --muted:  var(--gray-medium);
-      --border: #e5e5e0;
+      --border: #e5e1d8;
+      --border-strong: #d4cfc4;
       --radius: 8px;
       --gap:    24px;
 
@@ -53,7 +61,7 @@
     }
 
     body {
-      background: var(--gray-light);
+      background: var(--gray-soft);
       color: var(--dark-text);
       font-family: var(--font-sans);
       font-size: 14px;
@@ -65,9 +73,9 @@
 
     /* ── Scrollbar ── */
     ::-webkit-scrollbar { width: 8px; height: 8px; }
-    ::-webkit-scrollbar-track { background: var(--gray-light); }
-    ::-webkit-scrollbar-thumb { background: var(--gray-medium); border-radius: 4px; }
-    ::-webkit-scrollbar-thumb:hover { background: var(--navy); }
+    ::-webkit-scrollbar-track { background: var(--gray-soft); }
+    ::-webkit-scrollbar-thumb { background: var(--brand-pink); border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--brand-red); }
 
     /* ── Layout ── */
     .page { max-width: 1400px; margin: 0 auto; padding: 0 var(--gap) 56px; }
@@ -105,7 +113,7 @@
       font-weight: 500;
     }
     .header-brand p {
-      font-size: 0.72rem;
+      font-size: 0.74rem;
       color: var(--gray-medium);
       margin-top: 4px;
       font-weight: 400;
@@ -118,8 +126,8 @@
       flex-wrap: wrap;
     }
     .last-update {
-      font-size: 0.72rem;
-      color: var(--gray-medium);
+      font-size: 0.74rem;
+      color: var(--dark-text);
       font-weight: 400;
     }
     .last-update strong { color: var(--navy); font-weight: 600; }
@@ -133,6 +141,49 @@
       text-transform: uppercase;
       padding: 4px 12px;
       border-radius: 9999px;
+    }
+    .badge-live {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #15803d;
+      color: #fff;
+      font-size: 0.62rem;
+      font-weight: 700;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 9999px;
+    }
+    .badge-live::before {
+      content: '';
+      display: inline-block;
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: #fff;
+      animation: live-pulse 1.4s ease-in-out infinite;
+    }
+    @keyframes live-pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50%      { opacity: 0.35; transform: scale(0.7); }
+    }
+    .caneca-card.is-live {
+      border: 2px solid #15803d;
+      box-shadow: 0 0 0 3px rgb(21 128 61 / 0.10), var(--shadow-md);
+      position: relative;
+    }
+    .caneca-card.is-live::before {
+      content: 'LIVE';
+      position: absolute;
+      top: 8px; right: 8px;
+      background: #15803d;
+      color: #fff;
+      font-size: 0.55rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      padding: 2px 7px;
+      border-radius: 9999px;
+      box-shadow: 0 0 0 2px #fff;
     }
 
     /* ── BARRA DE FILTROS ── */
@@ -241,18 +292,18 @@
     .kpi-label {
       font-size: 0.68rem;
       text-transform: uppercase;
-      letter-spacing: 1.2px;
-      color: var(--gray-medium);
-      font-weight: 500;
-      margin-bottom: 12px;
+      letter-spacing: 1.4px;
+      color: var(--brand-red);
+      font-weight: 600;
+      margin-bottom: 14px;
     }
     .kpi-value {
       font-family: var(--font-serif);
-      font-size: 2.4rem;
+      font-size: 2.6rem;
       font-weight: 500;
       color: var(--navy);
       line-height: 1;
-      letter-spacing: -0.5px;
+      letter-spacing: -0.8px;
     }
     .kpi-value span {
       font-size: 1rem;
@@ -262,15 +313,16 @@
       letter-spacing: 0;
     }
     .kpi-sub {
-      font-size: 0.74rem;
-      color: var(--gray-medium);
-      margin-top: 10px;
-      line-height: 1.4;
+      font-size: 0.78rem;
+      color: var(--dark-text);
+      margin-top: 12px;
+      line-height: 1.5;
+      opacity: 0.78;
     }
     .progress-bar {
-      margin-top: 14px;
-      height: 3px;
-      background: var(--gray-light);
+      margin-top: 16px;
+      height: 4px;
+      background: var(--pink-soft-2);
       border-radius: 9999px;
       overflow: hidden;
     }
@@ -283,20 +335,21 @@
 
     /* ── Grupo de proceso ── */
     .grupo-proceso {
-      margin-bottom: 32px;
+      margin-bottom: 36px;
     }
     .grupo-header {
       display: flex;
       align-items: center;
       gap: 12px;
-      padding: 10px 16px;
+      padding: 14px 18px;
       border-radius: var(--radius) var(--radius) 0 0;
-      background: var(--dark2);
+      background: var(--white);
       border: 1px solid var(--border);
       border-bottom: none;
       margin-bottom: 0;
       flex-wrap: wrap;
       gap: 10px;
+      box-shadow: var(--shadow-sm);
     }
     .grupo-header-left {
       display: flex;
@@ -311,34 +364,39 @@
       flex-shrink: 0;
     }
     .grupo-nombre {
-      font-family: 'Baskervville', serif;
-      font-size: 1rem;
-      font-weight: 600;
-      color: var(--light);
+      font-family: var(--font-serif);
+      font-size: 1.15rem;
+      font-weight: 500;
+      color: var(--navy);
+      letter-spacing: -0.2px;
+      line-height: 1.2;
     }
     .grupo-codigo {
-      font-family: monospace;
-      font-size: 0.75rem;
-      color: var(--gold);
+      font-family: 'JetBrains Mono', 'SF Mono', Consolas, monospace;
+      font-size: 0.72rem;
+      color: var(--brand-red);
+      font-weight: 600;
+      letter-spacing: 0.4px;
+      margin-top: 2px;
     }
     .grupo-stats {
       display: flex;
       align-items: center;
-      gap: 16px;
+      gap: 18px;
       flex-wrap: wrap;
     }
     .grupo-stat {
-      font-size: 0.7rem;
-      color: var(--muted);
+      font-size: 0.74rem;
+      color: var(--gray-medium);
     }
-    .grupo-stat strong { color: var(--light); font-weight: 600; }
-    .grupo-stat .val-ok { color: var(--ok); }
-    .grupo-stat .val-score { color: var(--gold); }
+    .grupo-stat strong { color: var(--navy); font-weight: 600; }
+    .grupo-stat .val-ok { color: var(--ok); font-weight: 700; }
+    .grupo-stat .val-score { color: var(--tan); font-weight: 700; }
     .grupo-canecas-wrap {
       border: 1px solid var(--border);
       border-radius: 0 0 var(--radius) var(--radius);
-      padding: 16px;
-      background: rgba(44,45,46,0.5);
+      padding: 20px;
+      background: var(--pink-soft);
     }
 
     /* ── Canecas grid ── */
@@ -348,18 +406,19 @@
       gap: var(--gap);
     }
     .caneca-card {
-      background: var(--dark2);
+      background: var(--white);
       border: 1px solid var(--border);
       border-radius: var(--radius);
-      padding: 16px;
+      padding: 18px;
       position: relative;
-      transition: transform 0.2s, box-shadow 0.2s;
+      transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
       cursor: pointer;
+      box-shadow: var(--shadow-sm);
     }
     .caneca-card:hover {
       transform: translateY(-2px);
-      box-shadow: 0 8px 24px rgba(0,0,0,0.5);
-      border-color: rgba(203,159,91,0.5);
+      box-shadow: var(--shadow-md);
+      border-color: var(--brand-red);
     }
     .caneca-header {
       display: flex;
@@ -368,10 +427,11 @@
       margin-bottom: 12px;
     }
     .caneca-id {
-      font-family: 'Baskervville', serif;
-      font-size: 1rem;
+      font-family: var(--font-serif);
+      font-size: 1.05rem;
       font-weight: 600;
-      color: var(--light);
+      color: var(--navy);
+      letter-spacing: -0.2px;
     }
     .status-dot {
       width: 10px;
@@ -379,73 +439,77 @@
       border-radius: 50%;
       flex-shrink: 0;
     }
-    .status-dot.ok   { background: var(--ok);   box-shadow: 0 0 6px var(--ok); }
-    .status-dot.warn { background: var(--warn);  box-shadow: 0 0 6px var(--warn); }
-    .status-dot.crit { background: var(--crit);  box-shadow: 0 0 6px var(--crit); }
+    .status-dot.ok   { background: var(--ok);   box-shadow: 0 0 0 3px rgb(21 128 61 / 0.18); }
+    .status-dot.warn { background: var(--warn); box-shadow: 0 0 0 3px rgb(180 83 9 / 0.18); }
+    .status-dot.crit { background: var(--crit); box-shadow: 0 0 0 3px rgb(185 28 28 / 0.18); }
 
     .proceso-badge {
       display: inline-block;
       font-size: 0.62rem;
-      font-weight: 600;
-      letter-spacing: 0.5px;
-      padding: 2px 8px;
+      font-weight: 700;
+      letter-spacing: 0.6px;
+      padding: 3px 9px;
       border-radius: 20px;
       margin-bottom: 6px;
+      text-transform: uppercase;
     }
-    .badge-lpx { background: rgba(232,131,140,0.15); color: var(--pink); border: 1px solid rgba(232,131,140,0.4); }
-    .badge-biw { background: rgba(201,162,39,0.15);  color: var(--gold); border: 1px solid rgba(201,162,39,0.4); }
-    .badge-no  { background: rgba(74,222,128,0.12);  color: var(--ok);   border: 1px solid rgba(74,222,128,0.3); }
-    .badge-csp { background: rgba(147,197,253,0.12); color: #93c5fd;     border: 1px solid rgba(147,197,253,0.3); }
-    .badge-bnx { background: rgba(250,204,21,0.12);  color: var(--warn); border: 1px solid rgba(250,204,21,0.3); }
+    .badge-lpx { background: var(--pink-soft-2);            color: var(--brand-red); border: 1px solid rgb(193 0 74 / 0.25); }
+    .badge-biw { background: rgb(183 138 72 / 0.14);        color: var(--tan);       border: 1px solid rgb(183 138 72 / 0.35); }
+    .badge-no  { background: rgb(21 128 61 / 0.10);         color: var(--ok);        border: 1px solid rgb(21 128 61 / 0.30); }
+    .badge-csp { background: rgb(29 78 216 / 0.10);         color: #1d4ed8;          border: 1px solid rgb(29 78 216 / 0.30); }
+    .badge-bnx { background: rgb(180 83 9 / 0.10);          color: var(--warn);      border: 1px solid rgb(180 83 9 / 0.30); }
 
     /* Etapa badge */
     .etapa-badge {
       display: inline-block;
-      font-size: 0.58rem;
+      font-size: 0.6rem;
       font-weight: 600;
-      letter-spacing: 0.4px;
-      padding: 2px 7px;
+      letter-spacing: 0.5px;
+      padding: 3px 8px;
       border-radius: 20px;
       margin-left: 6px;
       vertical-align: middle;
+      text-transform: uppercase;
     }
-    .etapa-setup      { background: rgba(158,158,158,0.15); color: var(--muted); border: 1px solid rgba(158,158,158,0.3); }
-    .etapa-fermentando{ background: rgba(74,222,128,0.1);  color: var(--ok);   border: 1px solid rgba(74,222,128,0.25); }
-    .etapa-checkpoint  { background: rgba(147,197,253,0.12);color: #93c5fd;     border: 1px solid rgba(147,197,253,0.3); }
-    .etapa-objetivo    { background: rgba(203,159,91,0.15); color: var(--gold); border: 1px solid rgba(203,159,91,0.35); }
-    .etapa-listo       { background: rgba(74,222,128,0.18); color: var(--ok);   border: 1px solid rgba(74,222,128,0.4);  font-style: italic; }
+    .etapa-setup      { background: var(--navy-soft);          color: var(--navy);      border: 1px solid rgb(14 30 54 / 0.18); }
+    .etapa-fermentando{ background: rgb(21 128 61 / 0.10);     color: var(--ok);        border: 1px solid rgb(21 128 61 / 0.28); }
+    .etapa-checkpoint { background: rgb(29 78 216 / 0.10);     color: #1d4ed8;          border: 1px solid rgb(29 78 216 / 0.28); }
+    .etapa-objetivo   { background: rgb(183 138 72 / 0.14);    color: var(--tan);       border: 1px solid rgb(183 138 72 / 0.35); }
+    .etapa-listo      { background: rgb(21 128 61 / 0.18);     color: var(--ok);        border: 1px solid rgb(21 128 61 / 0.45); font-style: italic; }
 
     .caneca-row {
       display: flex;
       justify-content: space-between;
       align-items: baseline;
-      margin-bottom: 5px;
+      margin-bottom: 6px;
     }
-    .caneca-row-label { font-size: 0.68rem; color: var(--muted); }
-    .caneca-row-val   { font-size: 0.8rem;  font-weight: 500; color: var(--light); }
-    .caneca-row-val.highlight { color: var(--gold); font-weight: 600; }
-    .caneca-row-val.ok-val    { color: var(--ok); }
-    .caneca-row-val.warn-val  { color: var(--warn); }
-    .caneca-row-val.crit-val  { color: var(--crit); }
+    .caneca-row-label { font-size: 0.7rem; color: var(--gray-medium); font-weight: 500; }
+    .caneca-row-val   { font-size: 0.85rem; font-weight: 600; color: var(--dark-text); font-family: var(--font-sans); }
+    .caneca-row-val.highlight { color: var(--brand-red); font-weight: 700; font-family: var(--font-serif); font-size: 0.95rem; }
+    .caneca-row-val.ok-val    { color: var(--ok);   font-weight: 700; }
+    .caneca-row-val.warn-val  { color: var(--warn); font-weight: 700; }
+    .caneca-row-val.crit-val  { color: var(--crit); font-weight: 700; }
 
     .caneca-variedad {
-      font-size: 0.72rem;
-      color: var(--muted);
-      margin-bottom: 10px;
+      font-size: 0.74rem;
+      color: var(--gray-medium);
+      margin-bottom: 12px;
       font-style: italic;
+      font-family: var(--font-serif);
     }
 
-    .tiempo-bar { margin-top: 12px; }
+    .tiempo-bar { margin-top: 14px; }
     .tiempo-bar-labels {
       display: flex;
       justify-content: space-between;
-      font-size: 0.65rem;
-      color: var(--muted);
-      margin-bottom: 4px;
+      font-size: 0.66rem;
+      color: var(--gray-medium);
+      margin-bottom: 5px;
+      font-weight: 500;
     }
     .tiempo-bar-track {
       height: 5px;
-      background: rgba(255,255,255,0.08);
+      background: var(--pink-soft-2);
       border-radius: 3px;
       overflow: hidden;
     }
@@ -456,7 +520,7 @@
     }
     .fill-ok   { background: var(--ok); }
     .fill-warn { background: var(--warn); }
-    .fill-gold { background: var(--gold); }
+    .fill-gold { background: var(--brand-red); }
     .fill-crit { background: var(--crit); }
 
     /* ── Vel pH indicador ── */
@@ -467,9 +531,9 @@
       margin-bottom: 5px;
     }
     .vel-ph-val {
-      font-size: 0.78rem;
-      font-weight: 600;
-      font-family: monospace;
+      font-size: 0.8rem;
+      font-weight: 700;
+      font-family: 'JetBrains Mono', 'SF Mono', Consolas, monospace;
     }
     .vel-ok   { color: var(--ok); }
     .vel-warn { color: var(--warn); }
@@ -482,21 +546,30 @@
       gap: var(--gap);
     }
     .chart-card {
-      background: var(--dark2);
+      background: var(--white);
       border: 1px solid var(--border);
       border-radius: var(--radius);
-      padding: 20px;
+      padding: 22px;
+      box-shadow: var(--shadow-sm);
     }
     .chart-title {
-      font-size: 0.78rem;
-      font-weight: 600;
-      color: var(--light);
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--gray-medium);
       text-transform: uppercase;
-      letter-spacing: 0.6px;
-      margin-bottom: 10px;
+      letter-spacing: 1.2px;
+      margin-bottom: 12px;
     }
-    .chart-title span { color: var(--gold); }
-    .chart-wrap { position: relative; height: 200px; }
+    .chart-title span {
+      color: var(--brand-red);
+      font-family: var(--font-serif);
+      font-size: 1.1rem;
+      font-weight: 600;
+      text-transform: none;
+      letter-spacing: -0.3px;
+      margin-right: 6px;
+    }
+    .chart-wrap { position: relative; height: 220px; }
 
     /* ── Selector de canecas en gráfico ── */
     .chart-selector {
@@ -504,48 +577,51 @@
       align-items: center;
       gap: 6px;
       flex-wrap: wrap;
-      margin-bottom: 12px;
-      padding: 8px 0;
-      border-bottom: 1px solid rgba(255,255,255,0.05);
+      margin-bottom: 14px;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
     }
     .chart-selector-label {
       font-size: 0.62rem;
-      color: var(--muted);
+      color: var(--brand-red);
       text-transform: uppercase;
-      letter-spacing: 0.5px;
-      margin-right: 4px;
+      letter-spacing: 1px;
+      margin-right: 6px;
+      font-weight: 700;
     }
     .caneca-toggle {
       display: inline-flex;
       align-items: center;
       gap: 5px;
-      background: transparent;
-      border: 1px solid rgba(255,255,255,0.1);
-      color: var(--muted);
-      font-family: 'Jost', sans-serif;
-      font-size: 0.65rem;
-      font-weight: 500;
-      padding: 3px 8px;
-      border-radius: 20px;
+      background: var(--white);
+      border: 1px solid var(--border);
+      color: var(--dark-text);
+      font-family: var(--font-sans);
+      font-size: 0.68rem;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 9999px;
       cursor: pointer;
       transition: all 0.15s ease;
     }
-    .caneca-toggle:hover { border-color: var(--gold); color: var(--gold); }
+    .caneca-toggle:hover { border-color: var(--brand-red); color: var(--brand-red); }
     .caneca-toggle.active {
-      color: var(--dark);
+      color: var(--navy);
       font-weight: 700;
+      box-shadow: var(--shadow-sm);
     }
     .caneca-toggle .toggle-dot {
-      width: 6px;
-      height: 6px;
+      width: 7px;
+      height: 7px;
       border-radius: 50%;
       flex-shrink: 0;
     }
     .chart-max-warn {
-      font-size: 0.65rem;
+      font-size: 0.68rem;
       color: var(--warn);
       margin-left: 6px;
       display: none;
+      font-weight: 600;
     }
 
     /* ── Alertas ── */
@@ -554,40 +630,53 @@
       display: flex;
       align-items: center;
       gap: 14px;
-      background: var(--dark2);
+      background: var(--white);
       border: 1px solid var(--border);
       border-radius: 8px;
-      padding: 12px 16px;
-      transition: background 0.2s;
+      padding: 14px 18px;
+      transition: background 0.2s, border-color 0.2s, transform 0.2s;
+      box-shadow: var(--shadow-sm);
     }
-    .alerta-item:hover { background: var(--dark3); }
+    .alerta-item:hover {
+      background: var(--pink-soft);
+      border-color: var(--brand-red);
+      transform: translateX(2px);
+    }
     .alerta-dot {
-      width: 8px; height: 8px;
+      width: 9px; height: 9px;
       border-radius: 50%;
       flex-shrink: 0;
     }
-    .alerta-dot.ok   { background: var(--ok);   box-shadow: 0 0 5px var(--ok); }
-    .alerta-dot.warn { background: var(--warn);  box-shadow: 0 0 5px var(--warn); }
-    .alerta-dot.crit { background: var(--crit);  box-shadow: 0 0 5px var(--crit); }
+    .alerta-dot.ok   { background: var(--ok);   box-shadow: 0 0 0 3px rgb(21 128 61 / 0.18); }
+    .alerta-dot.warn { background: var(--warn); box-shadow: 0 0 0 3px rgb(180 83 9 / 0.18); }
+    .alerta-dot.crit { background: var(--crit); box-shadow: 0 0 0 3px rgb(185 28 28 / 0.18); }
     .alerta-tiempo {
-      font-size: 0.68rem;
-      color: var(--muted);
-      min-width: 88px;
+      font-size: 0.7rem;
+      color: var(--gray-medium);
+      min-width: 92px;
       flex-shrink: 0;
+      font-weight: 500;
     }
     .alerta-caneca {
-      font-size: 0.72rem;
-      font-weight: 600;
-      color: var(--gold);
-      min-width: 82px;
+      font-size: 0.74rem;
+      font-weight: 700;
+      color: var(--brand-red);
+      min-width: 88px;
       flex-shrink: 0;
+      font-family: 'JetBrains Mono', 'SF Mono', Consolas, monospace;
+      letter-spacing: 0.3px;
     }
-    .alerta-tipo { font-size: 0.72rem; font-weight: 500; color: var(--light); }
+    .alerta-tipo {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--navy);
+    }
     .alerta-msg {
-      font-size: 0.7rem;
-      color: var(--muted);
+      font-size: 0.74rem;
+      color: var(--dark-text);
       margin-left: auto;
       text-align: right;
+      opacity: 0.78;
     }
 
     /* ── Tabla procesos ── */
@@ -595,45 +684,58 @@
       overflow-x: auto;
       border-radius: var(--radius);
       border: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
     }
-    table { width: 100%; border-collapse: collapse; background: var(--dark2); }
+    table { width: 100%; border-collapse: collapse; background: var(--white); }
     th {
-      background: var(--dark3);
-      color: var(--muted);
+      background: var(--pink-soft);
+      color: var(--brand-red);
       font-size: 0.68rem;
       text-transform: uppercase;
-      letter-spacing: 0.7px;
-      font-weight: 600;
-      padding: 12px 16px;
+      letter-spacing: 1.1px;
+      font-weight: 700;
+      padding: 14px 18px;
       text-align: left;
-      border-bottom: 1px solid var(--border);
+      border-bottom: 1px solid var(--border-strong);
       white-space: nowrap;
     }
     td {
-      padding: 12px 16px;
-      font-size: 0.8rem;
-      border-bottom: 1px solid rgba(201,162,39,0.08);
+      padding: 14px 18px;
+      font-size: 0.82rem;
+      color: var(--dark-text);
+      border-bottom: 1px solid var(--border);
       vertical-align: middle;
     }
     tr:last-child td { border-bottom: none; }
-    tr:hover td { background: rgba(255,255,255,0.02); }
-    td.nombre-proceso { font-weight: 500; color: var(--light); }
-    td.codigo-proceso { font-family: monospace; color: var(--gold); font-size: 0.75rem; }
-    td.score { color: var(--ok); font-weight: 500; }
-    td.duracion { color: var(--muted); }
+    tr:hover td { background: var(--pink-soft); }
+    td.nombre-proceso {
+      font-weight: 600;
+      color: var(--navy);
+      font-family: var(--font-serif);
+      font-size: 0.95rem;
+    }
+    td.codigo-proceso {
+      font-family: 'JetBrains Mono', 'SF Mono', Consolas, monospace;
+      color: var(--brand-red);
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.4px;
+    }
+    td.score { color: var(--ok); font-weight: 700; font-family: var(--font-serif); }
+    td.duracion { color: var(--gray-medium); }
     .canecas-count {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      background: rgba(232,131,140,0.12);
-      border: 1px solid rgba(232,131,140,0.3);
-      color: var(--pink);
-      border-radius: 20px;
-      min-width: 28px;
-      height: 22px;
-      font-size: 0.75rem;
-      font-weight: 600;
-      padding: 0 8px;
+      background: var(--pink-soft-2);
+      border: 1px solid rgb(193 0 74 / 0.3);
+      color: var(--brand-red);
+      border-radius: 9999px;
+      min-width: 30px;
+      height: 24px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      padding: 0 9px;
     }
 
     /* ══════════════════════════════
@@ -642,7 +744,8 @@
     .modal-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.75);
+      background: rgba(14,30,54,0.45);
+      backdrop-filter: blur(4px);
       z-index: 1000;
       display: flex;
       align-items: center;
@@ -657,7 +760,7 @@
       pointer-events: all;
     }
     .modal-box {
-      background: var(--dark2);
+      background: var(--white);
       border: 1px solid var(--border);
       border-radius: 16px;
       width: 100%;
@@ -667,48 +770,52 @@
       transform: scale(0.93);
       transition: transform 0.25s ease;
       position: relative;
+      box-shadow: var(--shadow-lg);
     }
     .modal-overlay.visible .modal-box {
       transform: scale(1);
     }
     .modal-header {
-      padding: 20px 24px 16px;
+      padding: 24px 28px 20px;
       border-bottom: 1px solid var(--border);
       display: flex;
       align-items: flex-start;
       justify-content: space-between;
       gap: 12px;
+      background: var(--pink-soft);
     }
     .modal-titulo {
-      font-family: 'Baskervville', serif;
-      font-size: 1.3rem;
-      font-weight: 700;
-      color: var(--light);
+      font-family: var(--font-serif);
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--navy);
+      letter-spacing: -0.4px;
     }
-    .modal-titulo span { color: var(--gold); }
+    .modal-titulo span { color: var(--brand-red); font-style: italic; }
     .modal-subtitulo {
-      font-size: 0.78rem;
-      color: var(--muted);
-      margin-top: 4px;
+      font-size: 0.82rem;
+      color: var(--dark-text);
+      margin-top: 6px;
+      opacity: 0.78;
     }
     .modal-estado-badge {
-      font-size: 0.72rem;
+      font-size: 0.7rem;
       font-weight: 700;
-      padding: 4px 12px;
-      border-radius: 20px;
-      letter-spacing: 0.5px;
+      padding: 5px 14px;
+      border-radius: 9999px;
+      letter-spacing: 0.6px;
       text-transform: uppercase;
       margin-top: 6px;
       display: inline-block;
     }
-    .modal-estado-ok   { background: rgba(74,222,128,0.15); color: var(--ok);   border: 1px solid rgba(74,222,128,0.4); }
-    .modal-estado-warn { background: rgba(250,204,21,0.12);  color: var(--warn); border: 1px solid rgba(250,204,21,0.35); }
-    .modal-estado-crit { background: rgba(239,68,68,0.12);   color: var(--crit); border: 1px solid rgba(239,68,68,0.35); }
+    .modal-estado-ok   { background: rgb(21 128 61 / 0.14); color: var(--ok);   border: 1px solid rgb(21 128 61 / 0.40); }
+    .modal-estado-warn { background: rgb(180 83 9 / 0.12);  color: var(--warn); border: 1px solid rgb(180 83 9 / 0.40); }
+    .modal-estado-crit { background: rgb(185 28 28 / 0.12); color: var(--crit); border: 1px solid rgb(185 28 28 / 0.40); }
     .modal-close {
-      background: transparent;
-      border: 1px solid rgba(255,255,255,0.12);
-      color: var(--muted);
-      width: 32px; height: 32px;
+      background: var(--white);
+      border: 1px solid var(--border-strong);
+      color: var(--navy);
+      width: 36px; height: 36px;
       border-radius: 50%;
       font-size: 1rem;
       cursor: pointer;
@@ -716,52 +823,57 @@
       flex-shrink: 0;
       transition: all 0.15s;
     }
-    .modal-close:hover { border-color: var(--crit); color: var(--crit); }
-    .modal-body { padding: 20px 24px; }
+    .modal-close:hover { border-color: var(--brand-red); color: var(--brand-red); background: var(--pink-soft); }
+    .modal-body { padding: 24px 28px 28px; }
 
     .modal-metricas-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
-      margin-bottom: 24px;
+      gap: 14px;
+      margin-bottom: 28px;
     }
     .modal-metrica {
-      background: var(--dark3);
+      background: var(--pink-soft);
       border-radius: 10px;
-      padding: 14px;
-      border: 1px solid rgba(255,255,255,0.06);
+      padding: 16px;
+      border: 1px solid var(--border);
     }
     .modal-metrica-label {
-      font-size: 0.62rem;
+      font-size: 0.64rem;
       text-transform: uppercase;
-      letter-spacing: 0.7px;
-      color: var(--muted);
-      margin-bottom: 6px;
+      letter-spacing: 1px;
+      color: var(--brand-red);
+      margin-bottom: 8px;
+      font-weight: 700;
     }
     .modal-metrica-val {
-      font-family: 'Baskervville', serif;
-      font-size: 1.5rem;
-      font-weight: 700;
+      font-family: var(--font-serif);
+      font-size: 1.7rem;
+      font-weight: 600;
       line-height: 1;
+      color: var(--navy);
+      letter-spacing: -0.4px;
     }
     .modal-metrica-unit {
-      font-family: 'Jost', sans-serif;
-      font-size: 0.75rem;
-      color: var(--muted);
-      font-weight: 400;
+      font-family: var(--font-sans);
+      font-size: 0.78rem;
+      color: var(--gray-medium);
+      font-weight: 500;
     }
 
     /* Timeline de checkpoints */
     .modal-section-title {
+      font-family: var(--font-sans);
       font-size: 0.72rem;
       text-transform: uppercase;
-      letter-spacing: 0.8px;
-      color: var(--muted);
-      margin-bottom: 12px;
-      padding-bottom: 6px;
-      border-bottom: 1px solid rgba(255,255,255,0.06);
+      letter-spacing: 1.2px;
+      color: var(--brand-red);
+      font-weight: 700;
+      margin-bottom: 14px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
     }
-    .modal-section { margin-bottom: 22px; }
+    .modal-section { margin-bottom: 26px; }
 
     .timeline-checkpoints {
       display: flex;
@@ -784,82 +896,151 @@
       left: 50%;
       width: 100%;
       height: 2px;
-      background: rgba(255,255,255,0.1);
+      background: var(--border-strong);
       z-index: 0;
     }
-    .timeline-step.passed:not(:last-child)::after { background: rgba(74,222,128,0.4); }
+    .timeline-step.passed:not(:last-child)::after { background: var(--ok); }
     .timeline-dot {
       width: 18px; height: 18px;
       border-radius: 50%;
-      background: var(--dark3);
-      border: 2px solid rgba(255,255,255,0.15);
+      background: var(--white);
+      border: 2px solid var(--border-strong);
       z-index: 1;
       flex-shrink: 0;
       transition: all 0.2s;
     }
-    .timeline-step.passed .timeline-dot  { background: rgba(74,222,128,0.3); border-color: var(--ok); }
-    .timeline-step.current .timeline-dot { background: var(--gold); border-color: var(--gold); box-shadow: 0 0 8px rgba(203,159,91,0.6); }
+    .timeline-step.passed .timeline-dot  { background: var(--ok); border-color: var(--ok); }
+    .timeline-step.current .timeline-dot { background: var(--brand-red); border-color: var(--brand-red); box-shadow: 0 0 0 5px rgb(193 0 74 / 0.20); }
     .timeline-hora {
-      font-size: 0.62rem;
-      color: var(--muted);
-      margin-top: 6px;
-      font-weight: 500;
+      font-size: 0.66rem;
+      color: var(--gray-medium);
+      margin-top: 8px;
+      font-weight: 600;
     }
     .timeline-step.passed  .timeline-hora { color: var(--ok); }
-    .timeline-step.current .timeline-hora { color: var(--gold); font-weight: 700; }
+    .timeline-step.current .timeline-hora { color: var(--brand-red); font-weight: 700; }
     .timeline-label {
-      font-size: 0.58rem;
-      color: rgba(158,158,158,0.6);
+      font-size: 0.6rem;
+      color: var(--gray-medium);
       margin-top: 2px;
       text-align: center;
+      letter-spacing: 0.4px;
+      text-transform: uppercase;
     }
 
     /* Mini chart modal */
-    .modal-chart-wrap { position: relative; height: 160px; margin-top: 8px; }
+    .modal-chart-wrap { position: relative; height: 180px; margin-top: 10px; }
 
     /* Rangos protocolo */
     .modal-rangos-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
       gap: 10px;
     }
     .modal-rango {
-      background: var(--dark3);
+      background: var(--white);
       border-radius: 8px;
-      padding: 10px 12px;
-      border: 1px solid rgba(255,255,255,0.05);
+      padding: 12px 14px;
+      border: 1px solid var(--border);
     }
-    .modal-rango-label { font-size: 0.62rem; color: var(--muted); margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
-    .modal-rango-val { font-size: 0.82rem; color: var(--light); font-weight: 500; }
+    .modal-rango-label {
+      font-size: 0.64rem;
+      color: var(--gray-medium);
+      margin-bottom: 5px;
+      text-transform: uppercase;
+      letter-spacing: 0.7px;
+      font-weight: 600;
+    }
+    .modal-rango-val {
+      font-size: 0.86rem;
+      color: var(--navy);
+      font-weight: 600;
+    }
 
     /* Alertas del modal */
-    .modal-alertas { display: flex; flex-direction: column; gap: 8px; }
+    .modal-alertas { display: flex; flex-direction: column; gap: 10px; }
     .modal-alerta-item {
       display: flex;
       align-items: center;
       gap: 10px;
-      background: rgba(0,0,0,0.2);
+      background: var(--pink-soft);
+      border: 1px solid var(--border);
       border-radius: 8px;
-      padding: 10px 12px;
-      font-size: 0.75rem;
-      color: var(--light);
+      padding: 12px 14px;
+      font-size: 0.8rem;
+      color: var(--dark-text);
+      font-weight: 500;
     }
-    .modal-alerta-vacio { font-size: 0.75rem; color: var(--muted); font-style: italic; }
+    .modal-alerta-vacio {
+      font-size: 0.8rem;
+      color: var(--gray-medium);
+      font-style: italic;
+      padding: 8px 0;
+    }
 
     /* ── Footer ── */
     footer {
-      margin-top: 56px;
-      padding: 24px var(--gap);
+      margin-top: 64px;
+      padding: 32px var(--gap);
       border-top: 1px solid var(--border);
       text-align: center;
+      background: var(--white);
     }
-    .footer-brand { font-family: 'Baskervville', serif; font-size: 0.9rem; color: var(--muted); }
-    .footer-brand span { color: var(--gold); }
+    .footer-brand {
+      font-family: var(--font-serif);
+      font-size: 1rem;
+      color: var(--navy);
+      font-weight: 500;
+      letter-spacing: -0.2px;
+    }
+    .footer-brand span { color: var(--brand-red); font-style: italic; }
     .footer-note {
-      font-size: 0.68rem;
-      color: rgba(158,158,158,0.5);
-      margin-top: 6px;
+      font-size: 0.72rem;
+      color: var(--gray-medium);
+      margin-top: 8px;
       letter-spacing: 0.3px;
+    }
+
+    /* ── Sección Registrar °Brix ── */
+    .brix-edit { background: var(--white); border: 1px solid var(--border); border-radius: 14px; padding: 24px; box-shadow: var(--shadow-sm); }
+    .brix-edit-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 18px; }
+    .brix-edit-head .lead { font-size: 0.85rem; color: var(--gray-medium); margin-top: 4px; }
+    .brix-edit-head .lead strong { color: var(--brand-red); font-weight: 600; }
+    .brix-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; }
+    .brix-row { background: var(--pink-soft); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; transition: border-color .2s, box-shadow .2s; }
+    .brix-row:hover { border-color: var(--brand-red); box-shadow: var(--shadow-sm); }
+    .brix-row .id-line { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; margin-bottom: 8px; }
+    .brix-row .caneca-id { font-family: 'Playfair Display', serif; font-weight: 600; color: var(--navy); font-size: 1.05rem; }
+    .brix-row .proceso-tag { font-family: 'Inter', sans-serif; font-size: 0.65rem; color: var(--brand-red); text-transform: uppercase; letter-spacing: 1.4px; font-weight: 600; }
+    .brix-row .actual { font-size: 0.75rem; color: var(--gray-medium); margin-bottom: 10px; }
+    .brix-row .actual b { color: var(--tan); font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 600; }
+    .brix-form { display: flex; gap: 8px; align-items: center; }
+    .brix-input { flex: 1; padding: 9px 12px; border: 1.5px solid var(--border); border-radius: 8px; font-size: 0.95rem; font-family: 'Inter', sans-serif; color: var(--dark-text); background: var(--white); transition: border-color .2s, box-shadow .2s; }
+    .brix-input:focus { outline: none; border-color: var(--brand-red); box-shadow: 0 0 0 3px rgba(193,0,74,0.15); }
+    .brix-save { padding: 9px 14px; border-radius: 8px; border: none; background: var(--brand-red); color: var(--white); font-weight: 600; font-size: 0.85rem; cursor: pointer; transition: background .2s, transform .15s; font-family: 'Inter', sans-serif; }
+    .brix-save:hover { background: #9c003c; transform: translateY(-1px); }
+    .brix-save:disabled { opacity: .4; cursor: not-allowed; transform: none; }
+
+    .brix-log { margin-top: 22px; border-top: 1px solid var(--border); padding-top: 18px; }
+    .brix-log-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+    .brix-log-head h3 { font-family: 'Playfair Display', serif; color: var(--navy); font-size: 1.05rem; font-weight: 600; }
+    .brix-log-head .clear { background: transparent; border: 1px solid var(--border); color: var(--gray-medium); padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 0.75rem; font-family: 'Inter', sans-serif; transition: all .2s; }
+    .brix-log-head .clear:hover { border-color: var(--brand-red); color: var(--brand-red); }
+    .brix-log table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+    .brix-log th { text-align: left; padding: 8px 10px; background: var(--pink-soft); color: var(--brand-red); font-size: 0.68rem; text-transform: uppercase; letter-spacing: 1.2px; font-weight: 600; }
+    .brix-log td { padding: 9px 10px; border-bottom: 1px solid var(--border); color: var(--dark-text); }
+    .brix-log td.brix-val { font-family: 'Playfair Display', serif; color: var(--brand-red); font-weight: 600; font-size: 0.95rem; }
+    .brix-log td.muted { color: var(--gray-medium); font-size: 0.78rem; }
+    .brix-log .empty { text-align: center; padding: 24px; color: var(--gray-medium); font-style: italic; }
+
+    /* Toast */
+    .brix-toast { position: fixed; bottom: 28px; right: 28px; background: var(--navy); color: var(--white); padding: 14px 20px; border-radius: 10px; box-shadow: var(--shadow-lg); font-size: 0.88rem; font-weight: 500; opacity: 0; transform: translateY(12px); transition: opacity .25s, transform .25s; z-index: 999; pointer-events: none; }
+    .brix-toast.show { opacity: 1; transform: translateY(0); }
+    .brix-toast.error { background: var(--brand-red); }
+
+    @media (max-width: 640px) {
+      .brix-grid { grid-template-columns: 1fr; }
+      .brix-toast { left: 16px; right: 16px; bottom: 16px; text-align: center; }
     }
 
     /* ── Responsive ── */
@@ -906,8 +1087,9 @@
       <p>Monitoreo IoT de fermentación de café · Sistema de Control de Procesos</p>
     </div>
     <div class="header-meta">
-      <span class="last-update">Última actualización: <strong>hace 2 minutos</strong> · 13 Abr 2026, 09:00</span>
-      <span class="badge-demo">Datos de prueba</span>
+      <span class="last-update" id="last-update-meta">Última actualización: <strong>esperando sensor…</strong></span>
+      <span class="badge-live" id="header-live-badge" title="Lecturas en vivo desde monitor Tuya 8-en-1">LIVE TUYA</span>
+      <span class="badge-demo">Resto: demo</span>
     </div>
   </div>
   <!-- Barra de filtros por proceso -->
@@ -931,6 +1113,29 @@
     <h2 class="section-title">Resumen operativo</h2>
     <div class="kpi-grid" id="kpi-grid">
       <!-- Generado por JS para que se actualice con filtros -->
+    </div>
+  </section>
+
+  <!-- ╔══════════════════════════════════════════════╗ -->
+  <!-- ║          REGISTRAR °BRIX (manual)           ║ -->
+  <!-- ╚══════════════════════════════════════════════╝ -->
+  <section class="section">
+    <h2 class="section-title">Registrar °Brix <small>Lectura manual con refractómetro</small></h2>
+    <div class="brix-edit">
+      <div class="brix-edit-head">
+        <p class="lead">Captura el <strong>°Brix actual</strong> de cada caneca tras la medición con refractómetro. Se guarda localmente y queda en bitácora.</p>
+      </div>
+      <div class="brix-grid" id="brix-grid"><!-- generado por JS --></div>
+      <div class="brix-log">
+        <div class="brix-log-head">
+          <h3>Bitácora de lecturas</h3>
+          <button class="clear" id="brix-clear">Limpiar registros</button>
+        </div>
+        <table>
+          <thead><tr><th>Caneca</th><th>°Brix</th><th>Operario</th><th>Cuándo</th></tr></thead>
+          <tbody id="brix-log-body"></tbody>
+        </table>
+      </div>
     </div>
   </section>
 
@@ -1102,7 +1307,7 @@
 <!-- ╚══════════════════════════════════════════════╝ -->
 <footer>
   <div class="footer-brand">La Palma y el Tucán <span>©</span> 2026 — Coffee Fermentation Lab</div>
-  <div class="footer-note">Sistema en fase de prototipo · Datos de demostración · Sensores IoT (ESP32 + Atlas Scientific) no conectados</div>
+  <div class="footer-note">Sistema en fase de prototipo · 1 caneca LIVE con monitor Tuya 8-en-1 (Café Prueba) · resto en datos de demostración</div>
 </footer>
 
 
@@ -1115,11 +1320,11 @@
 // Horas de los checkpoints (eje X de los gráficos)
 const HORAS = [0, 6, 12, 24, 48, 72, 96];
 
-// ── Paleta de colores por caneca (para los charts) ──
+// ── Paleta de colores por caneca (Craft Lab — para los charts) ──
 const CANECA_COLORS = [
-  '#ED728B', '#CB9F5B', '#4ade80', '#93c5fd', '#facc15',
-  '#c084fc', '#fb923c', '#34d399', '#f472b6', '#60a5fa',
-  '#a78bfa', '#2dd4bf'
+  '#c1004a', '#b78a48', '#15803d', '#1d4ed8', '#b45309',
+  '#7c3aed', '#0891b2', '#be185d', '#0e1e36', '#e11d74',
+  '#a16207', '#047857'
 ];
 
 // ── Protocolos (para el modal) ──
@@ -1130,7 +1335,7 @@ const PROTOCOLOS = {
     tempRango: '18–24°C', brixInicio: '16–20', brixObjetivo: '≤ 4',
     duracion: '96h + 24-36h baba', score: '89.5–90.5',
     perfil: 'Cítrico · Floral · Dulce',
-    color: '#ED728B'
+    color: '#c1004a'
   },
   'BIW-200': {
     nombre: 'Bio-Innovation Washed',
@@ -1138,7 +1343,7 @@ const PROTOCOLOS = {
     tempRango: 'Monitorear cada 6h · HR <75%', brixInicio: '17–21', brixObjetivo: '≤ 3.5',
     duracion: '90-110h + 12-24h oxidativa', score: '89.5–91.0',
     perfil: 'Acidez compleja · Vinosidad · Florales',
-    color: '#CB9F5B'
+    color: '#b78a48'
   },
   'NO-120': {
     nombre: 'Natural Oscilante',
@@ -1146,7 +1351,7 @@ const PROTOCOLOS = {
     tempRango: 'Día 26-30°C / Noche 14-18°C', brixInicio: '18–22', brixObjetivo: '≤ 5',
     duracion: '120h oscilación térmica', score: '89.0–90.5',
     perfil: 'Fruta madura · Ron · Chocolate oscuro',
-    color: '#4ade80'
+    color: '#15803d'
   },
   'CSP-48': {
     nombre: 'Clarity Select pH',
@@ -1154,7 +1359,7 @@ const PROTOCOLOS = {
     tempRango: 'Monitorear cada 6h · zona fresca', brixInicio: '>18', brixObjetivo: '≤ 3',
     duracion: '48h anaeróbica + 24h semi-anaeróbica', score: '90.0–91.25',
     perfil: 'Elegante · Floral · pH controlado',
-    color: '#93c5fd'
+    color: '#1d4ed8'
   },
   'BNX-100': {
     nombre: 'Bionatural Selection X',
@@ -1162,21 +1367,37 @@ const PROTOCOLOS = {
     tempRango: 'Monitorear cada 6h · HR <80%', brixInicio: '17–20', brixObjetivo: '≤ 4',
     duracion: '72-100h anaeróbica', score: '89.0–90.0',
     perfil: 'Uva negra · Moras · Chocolate oscuro',
-    color: '#facc15'
+    color: '#b45309'
   }
 };
 
 // ── Info de grupos ──
 const GRUPOS_INFO = {
-  'LPX-500': { nombre: 'Láctico Modular LPX',   color: '#ED728B' },
-  'BIW-200': { nombre: 'Bio-Innovation Washed',  color: '#CB9F5B' },
-  'NO-120':  { nombre: 'Natural Oscilante',       color: '#4ade80' },
-  'CSP-48':  { nombre: 'Clarity Select pH',       color: '#93c5fd' },
-  'BNX-100': { nombre: 'Bionatural Selection X',  color: '#facc15' }
+  'LPX-500': { nombre: 'Láctico Modular LPX',   color: '#c1004a' },
+  'BIW-200': { nombre: 'Bio-Innovation Washed',  color: '#b78a48' },
+  'NO-120':  { nombre: 'Natural Oscilante',       color: '#15803d' },
+  'CSP-48':  { nombre: 'Clarity Select pH',       color: '#1d4ed8' },
+  'BNX-100': { nombre: 'Bionatural Selection X',  color: '#b45309' }
 };
 
 // ── Array de canecas con datos expandidos ──
 const CANECAS = [
+  /* ── CAFÉ PRUEBA · MONITOR TUYA LIVE ── */
+  {
+    id: 'LPET-CAFE-PRUEBA', proceso: 'LPX-500', badgeClass: 'badge-lpx',
+    variedad: 'Café Prueba (Tuya)', ph: 0, phObj: 3.8,
+    temp: 0, brix: 0,
+    horasActual: 0, horasTotal: 96,
+    estado: 'ok',
+    velPH: 0,
+    live: true,
+    liveDevice: 'eb49399225a76ac6e7usrt',
+    phHistory:   [null, null, null, null, null, null, null],
+    tempHistory: [null, null, null, null, null, null, null],
+    brixHistory: [null, null, null, null, null, null, null],
+    alertas: ['Esperando primera lectura del monitor Tuya…']
+  },
+
   /* ── LPX-500 ── */
   {
     id: 'LPET-C01', proceso: 'LPX-500', badgeClass: 'badge-lpx',
@@ -1420,7 +1641,7 @@ function buildCanecaCard(c) {
   const velInfo   = getVelPHInfo(c.velPH);
 
   return `
-    <div class="caneca-card" data-id="${c.id}" role="button" tabindex="0" aria-label="Ver detalle de ${c.id}">
+    <div class="caneca-card${c.live ? ' is-live' : ''}" data-id="${c.id}" role="button" tabindex="0" aria-label="Ver detalle de ${c.id}">
       <div class="caneca-header">
         <div class="caneca-id">${c.id.replace('LPET-', '')}</div>
         <div class="status-dot ${c.estado}"></div>
@@ -1589,10 +1810,10 @@ function abrirModal(c) {
   badgeEl.textContent  = c.listo ? 'Listo para despulpe' : c.estado === 'ok' ? 'OK — En rango' : 'Atención requerida';
   badgeEl.className    = 'modal-estado-badge modal-estado-' + (c.listo ? 'ok' : c.estado);
 
-  // Colores para las métricas
-  const phColor   = c.listo ? '#4ade80' : c.estado === 'warn' ? '#facc15' : '#CB9F5B';
-  const tempColor = (c.temp > 25 || c.temp < 18) ? '#facc15' : '#FCF7EC';
-  const velColor  = velInfo.clase === 'vel-ok' ? '#4ade80' : velInfo.clase === 'vel-warn' ? '#facc15' : '#ef4444';
+  // Colores para las métricas (Craft Lab — fondo claro)
+  const phColor   = c.listo ? '#15803d' : c.estado === 'warn' ? '#b45309' : '#c1004a';
+  const tempColor = (c.temp > 25 || c.temp < 18) ? '#b45309' : '#0e1e36';
+  const velColor  = velInfo.clase === 'vel-ok' ? '#15803d' : velInfo.clase === 'vel-warn' ? '#b45309' : '#b91c1c';
 
   // Checkpoints del timeline
   const checkpoints = [0, 24, 48, 72, 96];
@@ -1610,13 +1831,13 @@ function abrirModal(c) {
       </div>`;
   }).join('');
 
-  // Alertas de la caneca
+  // Alertas de la caneca (colores Craft Lab — fondo claro)
   const alertasHTML = c.alertas.length === 0
     ? '<div class="modal-alerta-vacio">Sin alertas activas para esta caneca.</div>'
     : c.alertas.map(a => {
         const isWarn = a.startsWith('⚠');
-        const color  = isWarn ? '#facc15' : '#4ade80';
-        return `<div class="modal-alerta-item"><span style="color:${color};font-size:0.9rem">${isWarn ? '⚠' : '✓'}</span> <span>${a.replace('⚠ ','')}</span></div>`;
+        const color  = isWarn ? '#b45309' : '#15803d';
+        return `<div class="modal-alerta-item"><span style="color:${color};font-size:1rem;font-weight:700">${isWarn ? '⚠' : '✓'}</span> <span>${a.replace('⚠ ','')}</span></div>`;
       }).join('');
 
   // Construir body del modal
@@ -1635,7 +1856,7 @@ function abrirModal(c) {
         </div>
         <div class="modal-metrica">
           <div class="modal-metrica-label">Brix</div>
-          <div class="modal-metrica-val" style="color:#FCF7EC">${c.brix.toFixed(1)}<span class="modal-metrica-unit">°Bx</span></div>
+          <div class="modal-metrica-val" style="color:#b78a48">${c.brix.toFixed(1)}<span class="modal-metrica-unit">°Bx</span></div>
         </div>
         <div class="modal-metrica">
           <div class="modal-metrica-label">Vel. pH</div>
@@ -1643,11 +1864,11 @@ function abrirModal(c) {
         </div>
         <div class="modal-metrica">
           <div class="modal-metrica-label">Horas / Total</div>
-          <div class="modal-metrica-val" style="color:#FCF7EC">${c.horasActual}<span class="modal-metrica-unit">h / ${c.horasTotal}h (${pct}%)</span></div>
+          <div class="modal-metrica-val" style="color:#0e1e36">${c.horasActual}<span class="modal-metrica-unit">h / ${c.horasTotal}h (${pct}%)</span></div>
         </div>
         <div class="modal-metrica">
           <div class="modal-metrica-label">Etapa</div>
-          <div class="modal-metrica-val" style="font-size:0.9rem;color:#CB9F5B">${etapa.label}</div>
+          <div class="modal-metrica-val" style="font-size:1rem;color:#c1004a;font-style:italic">${etapa.label}</div>
         </div>
       </div>
     </div>
@@ -1687,10 +1908,10 @@ function abrirModal(c) {
       <div class="modal-alertas">${alertasHTML}</div>
     </div>`;
 
-  // Crear el mini Chart.js de pH
+  // Crear el mini Chart.js de pH (Craft Lab — fondo claro)
   if (modalChart) { modalChart.destroy(); modalChart = null; }
   const canvas = document.getElementById('modal-chart-canvas');
-  const color  = proto.color || '#CB9F5B';
+  const color  = proto.color || '#c1004a';
   modalChart = new Chart(canvas, {
     type: 'line',
     data: {
@@ -1699,12 +1920,12 @@ function abrirModal(c) {
         label: c.id + ' — pH',
         data: c.phHistory,
         borderColor: color,
-        backgroundColor: color + '22',
-        borderWidth: 2,
+        backgroundColor: color + '1F',
+        borderWidth: 2.5,
         pointRadius: 4,
         pointBackgroundColor: color,
-        pointBorderColor: '#3a3b3c',
-        pointBorderWidth: 1,
+        pointBorderColor: '#ffffff',
+        pointBorderWidth: 2,
         tension: 0.4,
         spanGaps: false
       }]
@@ -1715,26 +1936,27 @@ function abrirModal(c) {
       plugins: {
         legend: { display: false },
         tooltip: {
-          backgroundColor: '#3a3b3c',
-          borderColor: 'rgba(203,159,91,0.3)',
+          backgroundColor: '#0e1e36',
+          borderColor: '#c1004a',
           borderWidth: 1,
-          titleColor: '#CB9F5B',
-          bodyColor: '#FCF7EC',
-          titleFont: { family: 'Jost', size: 11 },
-          bodyFont:  { family: 'Jost', size: 11 },
-          padding: 8
+          titleColor: '#fbc2c4',
+          bodyColor: '#ffffff',
+          titleFont: { family: 'Inter', size: 11, weight: '700' },
+          bodyFont:  { family: 'Inter', size: 11 },
+          padding: 10,
+          cornerRadius: 6
         }
       },
       scales: {
         x: {
-          grid:  { color: 'rgba(255,255,255,0.05)' },
-          ticks: { color: '#9e9e9e', font: { family: 'Jost', size: 10 } }
+          grid:  { color: 'rgba(14,30,54,0.06)' },
+          ticks: { color: '#6b6b6b', font: { family: 'Inter', size: 10, weight: '500' } }
         },
         y: {
-          grid:  { color: 'rgba(255,255,255,0.05)' },
-          ticks: { color: '#9e9e9e', font: { family: 'Jost', size: 10 } },
+          grid:  { color: 'rgba(14,30,54,0.06)' },
+          ticks: { color: '#6b6b6b', font: { family: 'Inter', size: 10, weight: '500' } },
           min: 3.4, max: 5.6,
-          title: { display: true, text: 'pH', color: '#9e9e9e', font: { family: 'Jost', size: 10 } }
+          title: { display: true, text: 'pH', color: '#0e1e36', font: { family: 'Inter', size: 11, weight: '600' } }
         }
       }
     }
@@ -1772,32 +1994,35 @@ const chartDefaults = {
     legend: {
       position: 'bottom',
       labels: {
-        color: '#9e9e9e',
-        font: { family: 'Jost', size: 11 },
+        color: '#1a1a1a',
+        font: { family: 'Inter', size: 11, weight: '500' },
         boxWidth: 12,
-        padding: 12
+        padding: 14,
+        usePointStyle: true,
+        pointStyle: 'circle'
       }
     },
     tooltip: {
-      backgroundColor: '#3a3b3c',
-      borderColor: 'rgba(203,159,91,0.3)',
+      backgroundColor: '#0e1e36',
+      borderColor: '#c1004a',
       borderWidth: 1,
-      titleColor: '#CB9F5B',
-      bodyColor: '#FCF7EC',
-      titleFont: { family: 'Jost', size: 11 },
-      bodyFont:  { family: 'Jost', size: 11 },
-      padding: 10
+      titleColor: '#fbc2c4',
+      bodyColor: '#ffffff',
+      titleFont: { family: 'Inter', size: 11, weight: '700' },
+      bodyFont:  { family: 'Inter', size: 11 },
+      padding: 10,
+      cornerRadius: 6
     }
   },
   scales: {
     x: {
-      grid:  { color: 'rgba(255,255,255,0.05)' },
-      ticks: { color: '#9e9e9e', font: { family: 'Jost', size: 10 } },
-      title: { display: true, text: 'Horas de fermentación', color: '#9e9e9e', font: { family: 'Jost', size: 10 } }
+      grid:  { color: 'rgba(14,30,54,0.06)' },
+      ticks: { color: '#6b6b6b', font: { family: 'Inter', size: 10, weight: '500' } },
+      title: { display: true, text: 'Horas de fermentación', color: '#0e1e36', font: { family: 'Inter', size: 11, weight: '600' } }
     },
     y: {
-      grid:  { color: 'rgba(255,255,255,0.05)' },
-      ticks: { color: '#9e9e9e', font: { family: 'Jost', size: 10 } }
+      grid:  { color: 'rgba(14,30,54,0.06)' },
+      ticks: { color: '#6b6b6b', font: { family: 'Inter', size: 10, weight: '500' } }
     }
   }
 };
@@ -1807,12 +2032,12 @@ function lineDataset(label, data, color) {
     label,
     data,
     borderColor: color,
-    backgroundColor: color + '18',
-    borderWidth: 2,
+    backgroundColor: color + '1A',
+    borderWidth: 2.5,
     pointRadius: 4,
     pointBackgroundColor: color,
-    pointBorderColor: '#2C2D2E',
-    pointBorderWidth: 1,
+    pointBorderColor: '#ffffff',
+    pointBorderWidth: 2,
     tension: 0.4,
     spanGaps: false
   };
@@ -1832,9 +2057,9 @@ function buildDatasets(tipo, activeSet) {
 
 // Inicializa los 3 gráficos principales
 function initCharts() {
-  const yPH   = { ...chartDefaults.scales.y, min: 3.4, max: 5.6, title: { display: true, text: 'pH',   color: '#9e9e9e', font: { family: 'Jost', size: 10 } } };
-  const yTemp = { ...chartDefaults.scales.y, min: 17,  max: 29,  title: { display: true, text: '°C',   color: '#9e9e9e', font: { family: 'Jost', size: 10 } } };
-  const yBrix = { ...chartDefaults.scales.y, min: 0,   max: 22,  title: { display: true, text: '°Bx',  color: '#9e9e9e', font: { family: 'Jost', size: 10 } } };
+  const yPH   = { ...chartDefaults.scales.y, min: 3.4, max: 5.6, title: { display: true, text: 'pH',   color: '#0e1e36', font: { family: 'Inter', size: 11, weight: '600' } } };
+  const yTemp = { ...chartDefaults.scales.y, min: 17,  max: 29,  title: { display: true, text: '°C',   color: '#0e1e36', font: { family: 'Inter', size: 11, weight: '600' } } };
+  const yBrix = { ...chartDefaults.scales.y, min: 0,   max: 22,  title: { display: true, text: '°Bx',  color: '#0e1e36', font: { family: 'Inter', size: 11, weight: '600' } } };
 
   chartPH = new Chart(document.getElementById('chartPH'), {
     type: 'line',
@@ -1876,7 +2101,7 @@ function buildSelectorToggles(tipo) {
     const isActive = activeSet.has(c.id);
     const btn    = document.createElement('button');
     btn.className = 'caneca-toggle' + (isActive ? ' active' : '');
-    btn.style.background = isActive ? color + '22' : '';
+    btn.style.background = isActive ? color + '18' : '';
     btn.style.borderColor = isActive ? color : '';
     btn.style.color = isActive ? color : '';
     btn.dataset.id   = c.id;
@@ -1944,6 +2169,209 @@ function aplicarFiltro(proceso) {
   document.querySelectorAll('.filtro-btn').forEach(btn => {
     btn.addEventListener('click', () => aplicarFiltro(btn.dataset.proceso));
   });
+
+  // ════════════════════════════════════════════
+  // SECCIÓN: REGISTRAR °Brix (prototipo localStorage)
+  // ════════════════════════════════════════════
+  const BRIX_KEY = 'lpet_brix_edits';
+  const loadEdits = () => { try { return JSON.parse(localStorage.getItem(BRIX_KEY) || '[]'); } catch { return []; } };
+  const saveEdits = (arr) => localStorage.setItem(BRIX_KEY, JSON.stringify(arr));
+
+  function lastBrixOverride(canecaId) {
+    const edits = loadEdits().filter(e => e.canecaId === canecaId);
+    return edits.length ? edits[edits.length - 1].brix : null;
+  }
+
+  function fmtAgo(ts) {
+    const min = Math.floor((Date.now() - ts) / 60000);
+    if (min < 1) return 'hace segundos';
+    if (min < 60) return `hace ${min} min`;
+    const h = Math.floor(min / 60);
+    if (h < 24) return `hace ${h} h`;
+    return `hace ${Math.floor(h / 24)} d`;
+  }
+
+  function renderBrixGrid() {
+    const grid = document.getElementById('brix-grid');
+    if (!grid) return;
+    grid.innerHTML = CANECAS.map(c => {
+      const override = lastBrixOverride(c.id);
+      const actual = override != null ? override : c.brix;
+      return `
+        <div class="brix-row" data-id="${c.id}">
+          <div class="id-line">
+            <span class="caneca-id">${c.id}</span>
+            <span class="proceso-tag">${c.proceso}</span>
+          </div>
+          <div class="actual">Actual: <b>${actual.toFixed(1)} °Brix</b>${override != null ? ' · editado' : ''}</div>
+          <form class="brix-form" data-id="${c.id}">
+            <input type="number" class="brix-input" step="0.1" min="0" max="30" placeholder="Nuevo °Brix" required aria-label="Nuevo Brix para ${c.id}">
+            <button type="submit" class="brix-save">Guardar</button>
+          </form>
+        </div>`;
+    }).join('');
+    grid.querySelectorAll('form.brix-form').forEach(f => f.addEventListener('submit', onBrixSubmit));
+  }
+
+  function renderBrixLog() {
+    const tbody = document.getElementById('brix-log-body');
+    if (!tbody) return;
+    const edits = loadEdits().slice().reverse().slice(0, 10);
+    if (!edits.length) { tbody.innerHTML = '<tr><td colspan="4" class="empty">Sin registros aún. La primera lectura aparecerá aquí.</td></tr>'; return; }
+    tbody.innerHTML = edits.map(e => `
+      <tr>
+        <td><strong>${e.canecaId}</strong></td>
+        <td class="brix-val">${parseFloat(e.brix).toFixed(1)}</td>
+        <td class="muted">${e.user || '—'}</td>
+        <td class="muted">${fmtAgo(e.timestamp)}</td>
+      </tr>`).join('');
+  }
+
+  function showToast(msg, isError) {
+    let t = document.getElementById('brix-toast');
+    if (!t) { t = document.createElement('div'); t.id = 'brix-toast'; t.className = 'brix-toast'; document.body.appendChild(t); }
+    t.textContent = msg;
+    t.classList.toggle('error', !!isError);
+    t.classList.add('show');
+    clearTimeout(t._h);
+    t._h = setTimeout(() => t.classList.remove('show'), 2400);
+  }
+
+  function onBrixSubmit(e) {
+    e.preventDefault();
+    const form = e.currentTarget;
+    const canecaId = form.dataset.id;
+    const input = form.querySelector('input.brix-input');
+    const brix = parseFloat(input.value);
+    if (isNaN(brix) || brix < 0 || brix > 30) { showToast('Valor inválido (0-30)', true); return; }
+    const edits = loadEdits();
+    edits.push({ canecaId, brix, timestamp: Date.now(), user: 'manual' });
+    saveEdits(edits);
+    input.value = '';
+    renderBrixGrid();
+    renderBrixLog();
+    showToast(`✓ ${canecaId}: ${brix.toFixed(1)} °Brix registrado`);
+  }
+
+  document.getElementById('brix-clear')?.addEventListener('click', () => {
+    if (!loadEdits().length) { showToast('No hay registros que limpiar', true); return; }
+    if (confirm('¿Borrar todos los registros locales de °Brix? Esta acción no se puede deshacer.')) {
+      saveEdits([]); renderBrixGrid(); renderBrixLog(); showToast('Bitácora limpiada');
+    }
+  });
+
+  renderBrixGrid();
+  renderBrixLog();
+
+  // ════════════════════════════════════════════
+  // SECCIÓN: MONITOR TUYA LIVE (Café Prueba)
+  // Webhook proxy n8n: https://jhona.app.n8n.cloud/webhook/tuya-fermentacion
+  // ════════════════════════════════════════════
+  const TUYA_WEBHOOK = 'https://jhona.app.n8n.cloud/webhook/tuya-fermentacion';
+  const TUYA_POLL_MS = 30000;
+  const LIVE_CANECA_ID = 'LPET-CAFE-PRUEBA';
+  const LIVE_HISTORY_MAX = 7; // mismo tamaño que phHistory mock
+
+  let liveStartTime = null;
+
+  function classifyEstado(temp, ph) {
+    if (temp == null || ph == null) return 'ok';
+    if (temp > 26 || temp < 16) return 'crit';
+    if (temp > 24 || temp < 18) return 'warn';
+    if (ph > 5.5 || ph < 3.4) return 'warn';
+    return 'ok';
+  }
+
+  function pushHistory(arr, value, max) {
+    const filled = arr.filter(v => v != null);
+    filled.push(value);
+    while (filled.length < max) filled.unshift(null);
+    return filled.slice(-max);
+  }
+
+  function fmtAgoLocal(ts) {
+    const sec = Math.floor((Date.now() - ts) / 1000);
+    if (sec < 60) return `hace ${sec}s`;
+    const min = Math.floor(sec / 60);
+    if (min < 60) return `hace ${min} min`;
+    const h = Math.floor(min / 60);
+    return `hace ${h} h`;
+  }
+
+  async function fetchTuyaLive() {
+    try {
+      const res = await fetch(TUYA_WEBHOOK, { cache: 'no-store' });
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      const data = await res.json();
+      if (!data.ok) throw new Error('payload not ok: ' + (data.error || 'unknown'));
+
+      const r = data.readings || {};
+      const c = CANECAS.find(x => x.id === LIVE_CANECA_ID);
+      if (!c) return;
+
+      // Marcar timestamp de arranque al primer fetch exitoso
+      if (!liveStartTime && data.last_reading_t) {
+        liveStartTime = Date.now();
+      }
+
+      // Actualizar valores actuales
+      const prevPh = c.ph;
+      c.ph = r.ph != null ? r.ph : c.ph;
+      c.temp = r.temp_c != null ? r.temp_c : c.temp;
+      // Brix no lo da Tuya (refractómetro manual) — dejar lo que haya en localStorage o 0
+      c.estado = classifyEstado(c.temp, c.ph);
+      c.velPH = (prevPh && c.ph) ? +(c.ph - prevPh).toFixed(2) : 0;
+
+      // Calcular horas transcurridas desde primera lectura
+      if (liveStartTime) {
+        c.horasActual = Math.min(
+          Math.floor((Date.now() - liveStartTime) / 3600000),
+          c.horasTotal
+        );
+      }
+
+      // Acumular history (rolling)
+      c.phHistory   = pushHistory(c.phHistory, c.ph, LIVE_HISTORY_MAX);
+      c.tempHistory = pushHistory(c.tempHistory, c.temp, LIVE_HISTORY_MAX);
+
+      // Mensaje de alerta dinámico
+      c.alertas = [
+        `Tuya 8-en-1 · pH ${c.ph.toFixed(2)} · Temp ${c.temp.toFixed(1)}°C · ORP ${r.orp_mv ?? '—'} mV`,
+        `Última lectura del sensor: ${fmtAgoLocal(data.last_reading_t || Date.now())}`
+      ];
+
+      // Actualizar header global
+      const meta = document.getElementById('last-update-meta');
+      if (meta) {
+        const now = new Date();
+        const hhmm = now.toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        meta.innerHTML = `Última actualización LIVE: <strong>${hhmm}</strong> · ${data.device_id.slice(0,12)}…`;
+      }
+
+      // Re-render UI
+      const canecasFiltradas = filtroActivo === 'todos'
+        ? CANECAS
+        : CANECAS.filter(x => x.proceso === filtroActivo);
+      renderKPIs(canecasFiltradas);
+      renderCanecas(canecasFiltradas);
+
+      // Refrescar charts si están inicializados
+      try {
+        if (typeof chartPH   !== 'undefined' && chartPH)   updateChart('ph');
+        if (typeof chartTemp !== 'undefined' && chartTemp) updateChart('temp');
+        if (typeof chartBrix !== 'undefined' && chartBrix) updateChart('brix');
+      } catch(e){ /* charts not ready yet */ }
+
+    } catch (err) {
+      console.warn('[TUYA LIVE] fetch failed:', err.message);
+      const meta = document.getElementById('last-update-meta');
+      if (meta) meta.innerHTML = `Última actualización: <strong style="color:var(--warn)">error sensor</strong>`;
+    }
+  }
+
+  // Primera carga + polling
+  fetchTuyaLive();
+  setInterval(fetchTuyaLive, TUYA_POLL_MS);
 })();
 </script>
 </body>
