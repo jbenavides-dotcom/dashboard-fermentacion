@@ -2302,8 +2302,11 @@ function aplicarFiltro(proceso) {
     try {
       const res = await fetch(TUYA_WEBHOOK, { cache: 'no-store' });
       if (!res.ok) throw new Error('HTTP ' + res.status);
-      const data = await res.json();
-      if (!data.ok) throw new Error('payload not ok: ' + (data.error || 'unknown'));
+      let raw = await res.json();
+      // n8n responde array [{...}] — desempacar al objeto
+      const data = Array.isArray(raw) ? raw[0] : raw;
+      if (!data || !data.ok) throw new Error('payload not ok: ' + (data && data.error || 'unknown'));
+      console.log('[TUYA LIVE] OK', data.readings);
 
       const r = data.readings || {};
       const c = CANECAS.find(x => x.id === LIVE_CANECA_ID);
