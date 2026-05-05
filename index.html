@@ -2268,7 +2268,7 @@ function aplicarFiltro(proceso) {
   // Webhook proxy n8n: https://jhona.app.n8n.cloud/webhook/tuya-fermentacion
   // ════════════════════════════════════════════
   const TUYA_WEBHOOK = 'https://jhona.app.n8n.cloud/webhook/tuya-fermentacion';
-  const TUYA_POLL_MS = 30000;
+  const TUYA_POLL_MS = 3600000; // 1 hora — fermentación es proceso lento, no necesita más
   const LIVE_CANECA_ID = 'LPET-CAFE-PRUEBA';
   const LIVE_HISTORY_MAX = 7; // mismo tamaño que phHistory mock
 
